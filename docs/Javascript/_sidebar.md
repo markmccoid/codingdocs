@@ -1,4 +1,4 @@
-- # [Home](/)
+- [Home](/)
 - Javascript Fundamentals
 	- [Naming Conventions](/Javascript/namingConventions)
 	- [Promises](/Javascript/promises)
