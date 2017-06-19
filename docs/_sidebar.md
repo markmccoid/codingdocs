@@ -6,6 +6,6 @@
 	- [Redux](/Redux/)
 	- [React Native](/ReactNative/)
 	- [Third Party Tools](/ThirdParty/)
-	- [Component Library](/ComponentLibrary)
+	- [Component Library](/ComponentLibrary/)
 	
 
