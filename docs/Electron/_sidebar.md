@@ -1,2 +1,3 @@
+- [Home](/)
 - Electron
 	- [Basics](/Electron/ElectronBasics)

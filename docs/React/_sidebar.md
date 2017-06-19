@@ -1,3 +1,4 @@
+- [Home](/)
 - React
 	- [React Basics](/React/ReactBasics)
 	- [React Router](/React/ReactRouter)
