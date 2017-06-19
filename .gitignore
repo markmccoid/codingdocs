@@ -1,0 +1,7 @@
+/node_modules
+myCodeDocs.zip
+*.bat
+
+# VSCode launch config
+/.vscode
+launch.js
