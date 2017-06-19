@@ -37,11 +37,12 @@ You will also need to modify the **webpack.config.dev.js** and **webpack.config.
 - npm-run-all - run multiple scripts at once
 
 **npm install script**
-```
+```javascript
 npm install --save-dev react-docgen@2.14.0 chokidar@1.6.1 npm-run-all@4.0.2
 
 npm install --save highlight.js@9.10.0
 ```
+
 ## Structure of components
 First we have the directory structure that must be followed:
 
