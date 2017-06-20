@@ -1,6 +1,22 @@
 # Ant Design
 [Antd's React Page](https://ant.design/docs/react/introduce)
 
+## Install and Importing
+
+You can use the (babel-import-plugin)[https://github.com/ant-design/babel-plugin-import] to have babel transpile so that you don't get the whole library installed and just the components you import, but it confuses me! 
+
+So, instead, I prefer to import manually like this:
+
+```javascript
+import DatePicker from 'antd/lib/date-picker';
+import Button from 'antd/lib/button';
+//Also con import css
+import 'antd/dist/antd.css'; //All the css...may be best not sure
+//Or import individual styles, but to me it looks like you get it all anyway.. not sure
+import 'antd/lib/date-picker/stle/css';
+import 'antd/lib/button/stle/css';
+```
+
 ## Table Component
 [Table Docs](https://ant.design/components/table/#) 
 
