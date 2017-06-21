@@ -3,6 +3,8 @@
 ### CSS Modules
 This is based on create-react-app's webpack config, but should work outside of it also.
 
+> **NOTE:** If you enable CSS Modules, you will lose any global styles.  Meaning you need to use CSS Modules everywhere.
+
 The webpack config's *modules* section is an object and one of the keys is **rules:**, this is where you will find the test for CSS.
 
 As an aside, the *rules* section of the *modules* part of the config is an array of objects.  Here is the css loader part:
@@ -58,4 +60,3 @@ test: /\.css$/,
 ```
 
 *modules:* will tell webpack to use modules and *localIdentName:* will tell it how to name, which will be name of component, [local] is the css class name and then the first 5 characters of the hash.
-* 
