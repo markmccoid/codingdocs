@@ -11,6 +11,11 @@
 ## Functional and Class Components
 
 <div><a name="functional-and-class-components"></a></div>
+
+Description of the difference between functional and class based components.
+
+Sometimes functional are called "dumb" components and class based are "smart" or "container" components.  But in truth, the difference as I see it is that class based components can have state and functional cannot.  Functional components rely on the passed props to render.
+
 ---
 ## State
 

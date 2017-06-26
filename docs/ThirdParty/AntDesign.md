@@ -16,6 +16,9 @@ import 'antd/dist/antd.css'; //All the css...may be best not sure
 import 'antd/lib/date-picker/stle/css';
 import 'antd/lib/button/stle/css';
 ```
+One thing to note with the css file imports.  They can overwrite existing global styles.  So if you import the antd css after your other base css files, it seems that antd likes to overwrite things like the html *body* settings.
+
+Once option is to just leave off the css and see if it works OR import your css files either in your Sass folder or in the app.js file in the order that you want them to show up.
 
 ## Table Component
 [Table Docs](https://ant.design/components/table/#) 

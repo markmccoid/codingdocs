@@ -81,7 +81,7 @@ router.get('/', (req, res) => {
 ...
 ```
 
-Parameters are the items at the end of a route:
+**Parameters** are the items at the **end of a route**:
 
 ` http://localhost/api/markmccoid `
 
@@ -89,12 +89,24 @@ You can get access to 'markmccoid' as follows:
 
 ```javascript
 ...
-router.get('/', (req, res) => {
+router.get('/api/:name', (req, res) => {
   let name = req.params.name;
   res.send(`req param is ${name}`);
 });
 ...
 ```
+
+**The body** of the route may also have an object associated with it:
+```javascript
+...
+router.get('/api/:name', (req, res) => {
+  let name = req.params.name;
+  let bodyObj = req.body.objProperty
+  res.send(`req param is ${name}`);
+});
+...
+```
+
 
 ## Templating and res.render()
 Templating is pretty much server side rendering.  Where we are building the HTML on the server and sending it to the client.  The templating examples below are going to be using **pug** which was previously called **jade**.
