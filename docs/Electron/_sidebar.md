@@ -1,3 +1,4 @@
 - [Home](/)
 - Electron
 	- [Basics](/Electron/ElectronBasics)
+	- [Tooling](/Electron/ElectronTooling.md)

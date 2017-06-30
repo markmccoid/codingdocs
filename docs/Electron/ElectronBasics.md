@@ -57,6 +57,155 @@ app.on('ready', () => {
 Note, that we are declaring mainWindow outside of the app.on listener because of scoping within the callback.  Meaning, we will want to have access to this mainWindow variable in other parts of our code, not just in the listener callback.
 
 ----
+### BrowserWindow Config Object
+The BrowserWindow function can have a config object passed to it.  Here are some basic settings:
+```javascript
+mainwWindow = new BrowserWindow({
+  width: 300, //in pixels
+  height: 500, //in pixels
+  frame: false, //title bar of app (i.e. one with minimize, maximize, etc)
+  resizable: false, //do not allow resizeing of window
+  show: false //show window on startup or don't
+})
+```
+
+## Determining Which Windows or Mac platform
+There will be times when we need to know if we are running on Windows or Mac.
+We can find this out by looking at the **process.platform** environment variable.
+- Windows will be **win32**
+- Mac will be **darwin**
+- Other options - **freebsd**, **linux**, **sunos**
+
+Can do something like:
+```javascript
+let something = process.platform === 'win32' ? 'windows stuff' : 'mac/other stuff';
+```
+
+## Tray Icons / Apps
+You can also create apps that have an icon in the Windows tray or Mac top bar.
+To do this you will need to use the **Tray** class from electron:
+```javascript
+const { app, BrowserWindow, Tray } = electron;
+
+app.on('ready', () => {
+  //get an icon -- windows needs to have a background, mac is transparent
+  const iconName = process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png';
+  const iconPath = path.join(__dirname, `./src/assets/${iconName}`);
+  //Instantiate a new tray object passing in the icon
+  tray = new Tray(iconPath);
+  tray.on('click', (event, bounds) => {
+  if(mainWindow.isVisible()) {
+    mainWindow.hide()
+  } else {
+    mainWindow.show();
+  }
+});
+...
+});
+```
+We can then define an .on 'click' event listener for the tray object.  Note, that the **tray.on()** callback function accepts the _event_ object and the _bounds_ object.
+
+### Extend the Tray class
+To make it so that our code isn't all stuck in the index.js file, we can create an extended class with the Tray class as it's base.  Here we will call our class the TimerTray:
+
+We will create this in the app directory:
+TimerApp
+  └ app
+      TimerTray.js
+  └ src
+      index.js
+      ...
+
+Notice that in the constructor, we are accepting the iconPath, which is what the Tray class expects, and also passing in the mainWindow, which we need in our extended class.  Remember to run super(iconPath);  
+```javascript
+const electron = require('electron');
+const { Tray } = electron;
+
+class TimerTray extends Tray {
+  constructor(iconPath, mainWindow) {
+    super(iconPath);
+    //setToolTip is a function in the Tray class.
+    this.setToolTip('Timer App');
+    this.mainWindow = mainWindow;
+    this.on('click', this.onClick.bind(this));
+  }
+  onClick(event, bounds) {
+    //get Click Event bounds
+    let { x, y } = bounds;
+    //get the bounds of the window
+    const { height, width } = this.mainWindow.getBounds();
+
+    if(this.mainWindow.isVisible()) {
+      this.mainWindow.hide()
+    } else {
+      const yPos = process.platform === 'win32' ? y - height : y;
+      this.mainWindow.setBounds({
+        x: x - (width / 2),
+        y: yPos,
+        height,
+        width
+      });
+      this.mainWindow.show();
+    }
+  }
+}
+module.exports = TimerTray;
+```
+
+### Handle Right-Click on Tray
+The Tray class has function called **popUpContextMenu()** that can be used to associate a regular menu config object with the right click action.
+
+```javascript
+//in the constructor set up a listener to listen for the right click
+constructor(iconPath, mainWindow) {
+  super(iconPath);
+
+  this.mainWindow = mainWindow;
+
+  this.setToolTip('Timer App');
+  this.on('click', this.onClick.bind(this));
+ //****
+  this.on('right-click', this.onRightClick.bind(this));
+}
+```
+
+Then create the associated function:
+```javascript
+  onRightClick() {
+    const menuConfig = Menu.buildFromTemplate([
+      {
+        label: 'Quit',
+        click: () => app.quit()
+      }
+    ]);
+
+    this.popUpContextMenu(menuConfig);
+  }
+```
+### bounds object
+The bounds object will help us determine the position of our window.  
+
+In the case of the tray 'click' event, it tells us where we clicked.  Not the exact 'x,y', but the center of the icon we clicked on.
+
+There is also a "window" bounds object.  We can use both of these to position our window where we want.
+
+![Mac Bounds](https://dl.dropboxusercontent.com/s/s9svephsb1jbaiw/electron-bounds-mac-1-small.png)
+![Windows Bound
+s](https://dl.dropboxusercontent.com/s/irptoqlc6ndl3t5/electron-bounds-win-1-small.png)
+
+### Setting the position of the mainWindow
+You can set the position of the main window using the **setBound({})** function call.  You will pass a config object to this function.  The x,y coordinates refer to the **upper left** corner.
+
+```javascript
+...
+const yPosition = process.platform === 'win32' ? y - height : y;
+mainWindow.setBounds({
+  x: x - (width / 2),
+  y,
+  height,
+  width
+});
+```
 
 ## Menus
 [Menu API Docs](https://electron.atom.io/docs/api/menu/)
@@ -378,3 +527,56 @@ ipcMain.on('todo:add', (event, todo) => {
 });
 ```
 
+## Cheatsheet
+**mac vs windows**
+Check the _process.platform_ variable
+- 'win32'
+- 'darwin' is mac
+
+**Hide icon on doc on mac**
+_app.dock.hide()_ But it doesn't work on windows (will throw error)
+
+**BrowserWindow event Listeners**
+- blur
+
+**BrowserWindow functions**
+```javascript
+  mainWindow = new BrowserWindow({
+    width: 300,
+    height: 500,
+    frame: false,
+    resizable: false,
+    show: false
+  });
+  //Loads the URL to show
+  mainWindow.loadURL(`file://${__dirname}/src/index.html`);
+  //sets up an event listener
+  mainWindow.on('blur', () => {
+    //hides the window
+    mainWindow.hide();
+  });
+  //shows the window
+  mainWindow.show();
+  //Get the size of the window
+  const {width, height} = mainWindow.getBounds();
+  mainWindow.setBounds({
+    x, //x position of the upper left corner
+    y, //y position of the upper left corner
+    height,
+    width
+  })
+```
+
+**backgroundThrottling** - When an app loses focus chromium throttles the app.  If you have a timer of something else running, it will pretty much stop until the app gets focus.
+Pass the backgrounThrottling web preference to the BrowserWindow constructor to keep this from happening.
+```javascript
+  constructor(url) {
+    super({
+      width: 300,
+      height: 500,
+      frame: false,
+      resizable: false,
+      show: false,
+      webPreferences: { backgroundThrottling: false}
+    });
+```
