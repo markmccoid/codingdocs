@@ -80,6 +80,79 @@ Can do something like:
 ```javascript
 let something = process.platform === 'win32' ? 'windows stuff' : 'mac/other stuff';
 ```
+## Sub-Classing (extending) BrowserWindow class
+If we have a lot going on in with the main window (BrowserWindow), we can "sub-class" it or extend the BrowserWindow class to make our code cleaner and easier to read.
+
+The structure for 
+ProjectDir/
+├── app/
+│         ├── main-window.js
+│         └── other-sub-classed.js
+└── src/
+│       ├── components
+│       └── other project source files
+├── index.js
+└── other files
+
+Our sub-classed BrowserWindow will be in main-window.js
+
+```javascript
+//main-window.js
+const electron = require('electron');
+const { BrowserWindow } = electron;
+
+class MainWindow extends BrowserWindow {
+  constructor(url) {
+    super({
+      width: 300,
+      height: 500,
+      frame: false,
+      resizable: false,
+      show: false,
+      webPreferences: { backgroundThrottling: false}
+    });
+    this.loadURL(url);
+    this.on('blur', this.onBlur.bind(this));
+  }
+
+  onBlur() {
+    this.hide();
+  }
+}
+module.exports = MainWindow;
+
+```
+Note that in the constructor we are accepting a _url_ argument.  This will be passed when we are instantiating this class.
+
+The constructor first calls super with what the main class expects to get and the we can do our special stuff like load the URL and set up some listeners.
+
+So we set up an on blur listener which references a class module "onBlur()".  Don't think you need the bind.  Also you could write the onBlur using ES6 arrow syntax to force proper this binding.
+
+Here is how we use this new "class":
+```javascript
+//index.js (main electron file)
+const path = require('path');
+const electron = require('electron');
+const { app, ipcMain } = electron;
+const TimerTray = require('./app/TimerTray');
+const MainWindow = require('./app/main_window');
+
+let mainWindow;
+let tray;
+
+app.on('ready', () => {
+
+  mainWindow = new MainWindow(`file://${__dirname}/src/index.html`);
+
+  const iconName = process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png';
+  const iconPath = path.join(__dirname, `./src/assets/${iconName}`);
+
+//Use our class that extends the "Tray" class from electron
+    tray = new TimerTray(iconPath, mainWindow);
+});
+...
+```
+
 
 ## Tray Icons / Apps
 You can also create apps that have an icon in the Windows tray or Mac top bar.
@@ -272,6 +345,7 @@ const menuTemplate = [
         click() {
           app.quit();
         }
+      }
     ]
   }
 ];

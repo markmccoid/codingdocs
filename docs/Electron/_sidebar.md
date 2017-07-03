@@ -2,3 +2,4 @@
 - Electron
 	- [Basics](/Electron/ElectronBasics)
 	- [Tooling](/Electron/ElectronTooling.md)
+	- [Packaging](/Electron/ElectronPackaging.md)
