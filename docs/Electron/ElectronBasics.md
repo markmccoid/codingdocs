@@ -549,12 +549,12 @@ Notice that each process, electron and HTML (front-end), has it's own send and r
 #### Send and Receive via IPC (Front-end)
 The first step is to use the *ipcRenderer* from electron in our HTML (or React or other front end) to send the message:
 
-**SEND From Front-end**
+**SEND From Front-end HTML**
 ```javascript
 //--addTodo.html
   <script>
-    const electron = require('electron');
-    const { ipcRenderer } = electron;
+  const electron = require('electron');
+  const { ipcRenderer } = electron;
     
     document.querySelector('form').addEventListener('submit', (event) => {
       event.preventDefault();
@@ -566,6 +566,13 @@ The first step is to use the *ipcRenderer* from electron in our HTML (or React o
   </script>
 ```
 Note that the 'todo:add' argument is user specified and will be used on the receiving end also.  So you should use descriptive terms here.  The second argument is the value we are sending.
+
+**SEND from a React application.**
+Pretty much the same as in HTML, but you will need to use the following to get at the ipcRenderer function.  The window.require is important, something about using the electron require that is in the global window space versus whatever webpack uses.
+
+```javascript
+const { ipcRenderer }  = window.require('electron');
+```
 
 **Receive From Front-end**
 ```javascript
