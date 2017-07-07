@@ -84,6 +84,7 @@ let something = process.platform === 'win32' ? 'windows stuff' : 'mac/other stuf
 If we have a lot going on in with the main window (BrowserWindow), we can "sub-class" it or extend the BrowserWindow class to make our code cleaner and easier to read.
 
 The structure for 
+```
 ProjectDir/
 ├── app/
 │         ├── main-window.js
@@ -93,7 +94,7 @@ ProjectDir/
 │       └── other project source files
 ├── index.js
 └── other files
-
+```
 Our sub-classed BrowserWindow will be in main-window.js
 
 ```javascript
