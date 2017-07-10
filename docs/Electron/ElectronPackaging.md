@@ -10,14 +10,19 @@ npm install --save-dev electron-builder
 You will need to setup a **build** section in the package.json file.  Lots of crap you could put in, I'm only reviewing what I used.  You can see full details at [electron builder options](https://github.com/electron-userland/electron-builder/wiki/Options)
 
 Here is my build section.  I don't know what the appId is for or what it does.  I included a directories section.  Both the _buildResources_ and the _output_ have defaults:
-**buildResources** - defaults to _build_  This is where your assets like icons will reside.  
+**buildResources** - defaults to _build_  This is where your assets like icons will reside.  **icon.ico** will be the main icon for a windows build
 **output** - defaults to _dist_ This is where your final build is located. 
+**extraFiles** - if you need to have extra files in your build, for example data files that you don't want in the user appData directory, then this is how you do it.  You will need to add a glob pattern, I usually have so I just grab everything in the directory with a "*".
 ```json
 	"build": {
 		"appId": "ncs.change.control",
 		"directories": {
 			"buildResources": "./assets",
 			"output": "./dist"
+		},
+		"extraFiles": "./data/*",
+		"win": {
+		  "icon", "assets/icon.ico"
 		}
 	},
 ```
@@ -36,7 +41,13 @@ Here are the scripts that can be used to build a release.  Again, these are in p
 ```
 The **dist** script will create an install file for the app as well as the unbundled set of files in the output folder.
 
-Be careful of what directories are in your project as electron builder will include just most of them in the asar file.  So if your asar file is large, check for extraneous directories in your project directory.
+### Dependencies vs Dev-Dependencies
+
+Here is the deal, when electron-builder is packaging your application, it will keep all of the node_modules that are in your **dependancies** section in package.json.
+
+If the node module gets incorporated into the bundle file, then it is NOT a dependency but instead should be in your dev-dependencies section.
+
+Also, be careful of what directories are in your project as electron builder will include just most of them in the asar file.  So if your asar file is large, check for extraneous directories in your project directory.
 
 ### asar file
 The asar file is a compressed version of your code with node modules etc.  If you want to see what is in it, you will need to install the _asar_ module and then "unzip" it.

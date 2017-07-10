@@ -80,6 +80,51 @@ Can do something like:
 ```javascript
 let something = process.platform === 'win32' ? 'windows stuff' : 'mac/other stuff';
 ```
+## Dev vs Production directories
+If you are accessing files via the filesystem, using node's fs module, you will need to access the files differently depending on whether you are in development mode or if you have packaged for production.
+
+In development mode, you can use Electron's **app.getAppPath()** to return the root directory of the application.  In the example below, **app.getAppPath()** would return the path to the ProjectDir.  You could then easily use **path.join()** to create a path to the data directory.
+```
+ProjectDir/
+├── app/
+│         ├── main-window.js
+│         └── other-sub-classed.js
+└── src/
+│       ├── components
+│       └── other project source files
+├── data
+│       ├── file1.json
+│       └── file2.json
+└── index.js
+```
+While this is all fine and good, once you package this, the **app.getAppPath()** will now return a path INTO your asar file.  This is OK if you are only reading the data, but you will NOT be able to update the data files.
+
+For production/packaged access, you can use the following:
+
+```javascript
+  return path.join(path.dirname(remote.app.getPath('exe')), '/data', fileName);
+```
+
+The **app.getPath('exe')** will return the path to the exe, including the exe name.  Use the **path.dirname()** to strip the exe name off.
+
+Depending on where you are calling these functions from, you may need to use the **remote** option in electron.
+
+Here is the final chuck of code that could be put in a data access module:
+
+```javascript
+//Can't access the remote.app. feature except from within a function.  Probably after app has loaded.
+//passed either GROUPS_FILE or FIELDS_FILE, will return the path, relative to where the GroupCreate.EXE
+//is located.
+const getLocalFile = (dataFile) => {
+	if (process.env.NODE_ENV === 'development') {
+		return path.join(remote.app.getAppPath(), '/data', dataFile);
+	}
+	return path.join(path.dirname(remote.app.getPath('exe')), '/data', dataFile);
+};
+const GROUPS_FILE = 'qvgroups.json';
+const FIELDS_FILE = 'analytixfields.json';
+```
+
 ## Sub-Classing (extending) BrowserWindow class
 If we have a lot going on in with the main window (BrowserWindow), we can "sub-class" it or extend the BrowserWindow class to make our code cleaner and easier to read.
 
@@ -450,6 +495,37 @@ const menu = Menu.buildFromTemplate(template)
 Menu.setApplicationMenu(menu)
 ```
 
+Another option to creating the menu and having it check for windows or mac is to create a *main-menu.js* file in the root or app directory as follows:
+[Egghead on Electron](https://egghead.io/lessons/javascript-create-a-native-desktop-system-menu-with-the-electron-menu-module)
+
+```javascript
+//====main-menu.js
+const { app, Menu } = require('electron');
+const isWindows = process.platform === 'win32';
+
+module.exports = {
+  setMainMenu
+};
+
+function setMainMenu() {
+  const template = [
+    {
+      label: isWindows ? 'File' : app.getName(),
+      subMenu: [
+        {
+          label: isWindows ? 'Exit' : `Quite ${app.getName()}`,
+          accelerator: isWindows ? 'Alt+F4' : 'CmdOrCtrl+Q',
+          click() { app.quit(); }
+        }
+      ]
+    }
+  ];
+
+const menu = Menu.buildFromTemplate(template);
+Menu.setApplicationMenu(menu);
+}
+```
+
 #### Dev Environment Menus
 You can determine if you are in the Dev or production environment using the **process.env.NODE_ENV** variable.
 
@@ -619,7 +695,21 @@ Check the _process.platform_ variable
 _app.dock.hide()_ But it doesn't work on windows (will throw error)
 
 **BrowserWindow event Listeners**
-- blur
+- 'blur'
+- 'ready-to-show' - fires when the initial DOM has been rendered.
+```javascript
+...
+app.on('ready', () => {
+  mainWindow = newBrowserWindow({
+    show: false
+  });
+  mainWindow.loadURL(...);
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show();
+  });
+});
+```
+- 
 
 **BrowserWindow functions**
 ```javascript
