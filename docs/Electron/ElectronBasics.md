@@ -21,7 +21,7 @@ I am thinking that it would be best to create an "Interface" set of functions th
 ## Project Setup
 Nothing to crazy, here.  Create your directory, **npm init** and then install electron **npm install --save electron**.
 
-``` 
+```
 npm init
 npm install --save electron
 ```
@@ -53,7 +53,7 @@ app.on('ready', () => {
   mainWindow = new BrowserWindow({});
   mainWindow.loadURL(`file://${__dirname}/main.html`);
 })
-``` 
+```
 Note, that we are declaring mainWindow outside of the app.on listener because of scoping within the callback.  Meaning, we will want to have access to this mainWindow variable in other parts of our code, not just in the listener callback.
 
 ----
@@ -162,7 +162,7 @@ const menuTemplate = [
 ];
 ```
 **Cross Platform Menu Issue** - You will find that on Mac machines, it makes the first menu item part of the "system" menu, so for macs you need to enter a blank object for the first item in the menuTemplate to account for this.  Luckily, since electron is based on node, we have access to node's **process.platform** function.  This will return either "darwin" for mac or "win32" for windows.  So, we can update our code to take this into account:
- 
+
 ```javascript
 const menuTemplate = [
   {
@@ -183,6 +183,7 @@ const menuTemplate = [
         click() {
           app.quit();
         }
+      }
     ]
   }
 ];
@@ -286,6 +287,37 @@ const menu = Menu.buildFromTemplate(template)
 Menu.setApplicationMenu(menu)
 ```
 
+Another option to creating the menu and having it check for windows or mac is to create a *main-menu.js* file in the root or app directory as follows:
+[Egghead on Electron](https://egghead.io/lessons/javascript-create-a-native-desktop-system-menu-with-the-electron-menu-module)
+
+```javascript
+//====main-menu.js
+const { app, Menu } = require('electron');
+const isWindows = process.platform === 'win32';
+
+module.exports = {
+  setMainMenu
+};
+
+function setMainMenu() {
+  const template = [
+    {
+      label: isWindows ? 'File' : app.getName(),
+      subMenu: [
+        {
+          label: isWindows ? 'Exit' : `Quite ${app.getName()}`,
+          accelerator: isWindows ? 'Alt+F4' : 'CmdOrCtrl+Q',
+          click() { app.quit(); }
+        }
+      ]
+    }
+  ];
+
+const menu = Menu.buildFromTemplate(template);
+Menu.setApplicationMenu(menu);
+}
+```
+
 #### Dev Environment Menus
 You can determine if you are in the Dev or production environment using the **process.env.NODE_ENV** variable.
 
@@ -340,7 +372,7 @@ You can easily add accelerator keys within applications by adding the *accelerat
 - **AltGr**
 - **Shift**
 - **Super** - The *Super* key is mapped to the Windows key on Windows and Linux and Cmd on macOS.
- 
+
 #### function calls
 To associate an action with a menu and it's accelerator, you simply add a *click() {}* function to the menu object you are working on.  See example above.
 
@@ -378,7 +410,7 @@ Notice that each process, electron and HTML (front-end), has it's own send and r
 **Front end (Main Window in diagram), you have:**
 - **ipcRenderer.send** - sends message back to *electron* process
 - **ipcRenderer.on** - sets up a listener for messages being sent to window.
- 
+
 **Electron Process**
 - **mainWindow.webContents.send** - mainWindow is the handle to the window we are sending data to.
 - **ipcMain.on** - sets up a listener for messages being sent from a window (HTML/front-end)
@@ -386,13 +418,13 @@ Notice that each process, electron and HTML (front-end), has it's own send and r
 #### Send and Receive via IPC (Front-end)
 The first step is to use the *ipcRenderer* from electron in our HTML (or React or other front end) to send the message:
 
-**SEND From Front-end**
+**SEND From Front-end HTML**
 ```javascript
 //--addTodo.html
   <script>
-    const electron = require('electron');
-    const { ipcRenderer } = electron;
-    
+  const electron = require('electron');
+  const { ipcRenderer } = electron;
+
     document.querySelector('form').addEventListener('submit', (event) => {
       event.preventDefault();
       //Get value from input element
@@ -403,6 +435,13 @@ The first step is to use the *ipcRenderer* from electron in our HTML (or React o
   </script>
 ```
 Note that the 'todo:add' argument is user specified and will be used on the receiving end also.  So you should use descriptive terms here.  The second argument is the value we are sending.
+
+**SEND from a React application.**
+Pretty much the same as in HTML, but you will need to use the following to get at the ipcRenderer function.  The window.require is important, something about using the electron require that is in the global window space versus whatever webpack uses.
+
+```javascript
+const { ipcRenderer }  = window.require('electron');
+```
 
 **Receive From Front-end**
 ```javascript
@@ -421,14 +460,14 @@ Note that the 'todo:add' argument is user specified and will be used on the rece
 ```
 Note that, as you will see, this *window* (html file) has been targeted with a 'todo:add' message.  Meaning, when you send data from the electron process, you must send it to a specific window.
 
- 
+
 #### Send and Receive via IPC in Electron Process
 In our main electron process (index.js), we get ipcMain from the electron object and set a listener on it.  This listener will fire whenever the event it is looking for happens:
 
 ```javascript
 const { app, BrowserWindow, Menu, ipcMain } = electron;  //destruction off the electron object
 
-... 
+...
 
 //Watch for the 'todo:add' event to happen, then execute the callback.
 ipcMain.on('todo:add', (event, todo) => {
@@ -438,3 +477,70 @@ ipcMain.on('todo:add', (event, todo) => {
 });
 ```
 
+## Cheatsheet
+**mac vs windows**
+Check the _process.platform_ variable
+- 'win32'
+- 'darwin' is mac
+
+**Hide icon on doc on mac**
+_app.dock.hide()_ But it doesn't work on windows (will throw error)
+
+**BrowserWindow event Listeners**
+- 'blur'
+- 'ready-to-show' - fires when the initial DOM has been rendered.
+```javascript
+...
+app.on('ready', () => {
+  mainWindow = newBrowserWindow({
+    show: false
+  });
+  mainWindow.loadURL(...);
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show();
+  });
+});
+```
+-
+
+**BrowserWindow functions**
+```javascript
+  mainWindow = new BrowserWindow({
+    width: 300,
+    height: 500,
+    frame: false,
+    resizable: false,
+    show: false
+  });
+  //Loads the URL to show
+  mainWindow.loadURL(`file://${__dirname}/src/index.html`);
+  //sets up an event listener
+  mainWindow.on('blur', () => {
+    //hides the window
+    mainWindow.hide();
+  });
+  //shows the window
+  mainWindow.show();
+  //Get the size of the window
+  const {width, height} = mainWindow.getBounds();
+  mainWindow.setBounds({
+    x, //x position of the upper left corner
+    y, //y position of the upper left corner
+    height,
+    width
+  })
+```
+
+**backgroundThrottling** - When an app loses focus chromium throttles the app.  If you have a timer of something else running, it will pretty much stop until the app gets focus.
+Pass the backgrounThrottling web preference to the BrowserWindow constructor to keep this from happening.
+```javascript
+  constructor(url) {
+    super({
+      width: 300,
+      height: 500,
+      frame: false,
+      resizable: false,
+      show: false,
+      webPreferences: { backgroundThrottling: false}
+    });
+```
