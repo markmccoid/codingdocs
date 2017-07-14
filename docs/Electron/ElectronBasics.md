@@ -57,6 +57,66 @@ app.on('ready', () => {
 Note, that we are declaring mainWindow outside of the app.on listener because of scoping within the callback.  Meaning, we will want to have access to this mainWindow variable in other parts of our code, not just in the listener callback.
 
 ----
+### BrowserWindow Config Object
+The BrowserWindow function can have a config object passed to it.  Here are some basic settings:
+```javascript
+mainwWindow = new BrowserWindow({
+  width: 300, //in pixels
+  height: 500, //in pixels
+  frame: false, //title bar of app (i.e. one with minimize, maximize, etc)
+  resizable: false, //do not allow resizeing of window
+  show: false //show window on startup or don't
+})
+```
+
+## Determining Which Windows or Mac platform
+There will be times when we need to know if we are running on Windows or Mac.
+We can find this out by looking at the **process.platform** environment variable.
+- Windows will be **win32**
+- Mac will be **darwin**
+- Other options - **freebsd**, **linux**, **sunos**
+
+Can do something like:
+```javascript
+let something = process.platform === 'win32' ? 'windows stuff' : 'mac/other stuff';
+```
+
+## Tray Icons / Apps
+You can also create apps that have an icon in the Windows tray or Mac top bar.
+To do this you will need to use the **Tray** class from electron:
+```javascript
+const { app, BrowserWindow, Tray } = electron;
+
+app.on('ready', () => {
+  //get an icon -- windows needs to have a background, mac is transparent
+  const iconName = process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png';
+  const iconPath = path.join(__dirname, `./src/assets/${iconName}`);
+  //Instantiate a new tray object passing in the icon
+  tray = new Tray(iconPath);
+  tray.on('click', (event, bounds) => {
+  if(mainWindow.isVisible()) {
+    mainWindow.hide()
+  } else {
+    mainWindow.show();
+  }
+});
+...
+});
+```
+We can then define an .on 'click' event listener for the tray object.  Note, that the **tray.on()** callback function accepts the _event_ object and the _bounds_ object.
+
+### bounds object
+The bounds object will help us determine the position of our window.  
+
+In the case of the tray 'click' event, it tells us where we clicked.  Not the exact 'x,y', but the center of the icon we clicked on.
+
+There is also a "window" bounds object.  We can use both of these to position our window where we want.
+
+![Mac Bounds](https://dl.dropboxusercontent.com/s/s9svephsb1jbaiw/electron-bounds-mac-1-small.png)
+![Windows Bound
+s](https://dl.dropboxusercontent.com/s/irptoqlc6ndl3t5/electron-bounds-win-1-small.png)
+
+
 
 ## Menus
 [Menu API Docs](https://electron.atom.io/docs/api/menu/)
