@@ -397,8 +397,29 @@ function createAddWindow() {
   addWindow.on('closed', () => addWindow = null);
 }
 ```
+-------
+## Using Remote 
+The remote module provides a simple way to do inter-process communication (IPC) between the renderer process (web page) and the main process.
 
-----
+In Electron, GUI-related modules (such as dialog, menu etc.) are only available in the main process, not in the renderer process. In order to use them from the renderer process, the ipc module is necessary to send inter-process messages to the main process. With the remote module, you can invoke methods of the main process object without explicitly sending inter-process messages.
+
+I have used this mainly for native file access.  The **remote** module lets you get paths to files.
+
+```javascript
+const { remote } = require('electron');
+
+//Can't access the remote.app. feature except from within a function.  Probably after app has loaded.
+//pass the filename including extension, will return the path, relative to where the GroupCreate.EXE
+//is located in production and relative to where electron index.js is in Dev.
+const getLocalFile = (dataFile) => {
+	if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'dev-home') {
+		return path.join(remote.app.getAppPath(), '/dataFiles', dataFile);
+	}
+	return path.join(path.dirname(remote.app.getPath('exe')), '/dataFiles', dataFile);
+};
+```
+
+----------
 
 ## IPC - Inter-process Communication
 Allows the Electron main application to communicate and send data to the BrowserWindow children.
