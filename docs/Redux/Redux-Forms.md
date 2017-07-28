@@ -257,8 +257,13 @@ Redux form will initialize your form by looking for a prop called " **initialVal
 		notes: qvVar.notes
 	};
 ```
+## Action Creators
+Redux-forms comes with a set of predefined action creators that you can you to manipulate your forms.  You can find them all here:
+[redux-forms v6 Action Creators](http://redux-form.com/6.4.3/docs/api/ActionCreators.md/)
+One that I have used in the **change(form, field, value)**
+If you have decorated your component with redux forms, you will have these actions creators, ready to run in props.  You won't have to call dispatch as these will be all ready to go.
 
-# Custom Field Components
+## Custom Field Components
 
 You can create a custom component to act as an "input" field. For example, if you want to have a <div> that when clicked would toggle between true and false, you can do this, you don't always need to use HTML input elements.
 
