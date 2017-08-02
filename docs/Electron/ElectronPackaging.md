@@ -43,7 +43,9 @@ The **dist** script will create an install file for the app as well as the unbun
 
 ### Dependencies vs Dev-Dependencies
 
-Here is the deal, when electron-builder is packaging your application, it will keep all of the node_modules that are in your **dependancies** section in package.json.
+Here is the deal, when electron-builder is packaging your application, it will keep all of the node_modules that are in your **dependancies** section in package.json and put them in your app.asar file.
+
+To determine what should be in the dependancies section look in your driving js file (usually index.js) that is setting up your electron process. Also, if you have any modules that are accessed via remote, like file access modules, include any modules they depend on in the package.json dependancies section.
 
 If the node module gets incorporated into the bundle file, then it is NOT a dependency but instead should be in your dev-dependencies section.
 

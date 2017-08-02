@@ -41,6 +41,8 @@ In the root of the project directory, you will have your **package.json** plus:
 - **index.js** - This is your Electron process (i.e. the backend server analogy)
 - **main.html** - Doesn't have to be named main, but this will be the html file that will be loaded into the browser window instance that our index.js electron process will create.
 
+**NOTE:** - in your main.html or index.html make sure to set the **<title></title>** to what you want to display in your title bar of the window.
+
 Here is the basic **index.js** code:
 ```javascript
 const electron = require('electron');
