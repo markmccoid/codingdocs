@@ -7,7 +7,7 @@
 	- [Redux](/Redux/)
 	- [React Native](/ReactNative/)
 	- [Webpack 2](/Webpack/)
-	- [HTML-CSS](/HTML-CSS)
+	- [HTML-CSS](/HTML-CSS/)
 	- [git](/git/)
 	- [Third Party Tools](/ThirdParty/)
 	- [Component Library](/ComponentLibrary/)
