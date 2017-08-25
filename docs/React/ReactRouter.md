@@ -14,16 +14,16 @@ Everything is “component” based.  A bit hard to get your head around, but he
 React router is now broken up into either *react-router-dom* or *react-router-native*.  The former for browser based code and the latter for react native applications.
 
 We will review the main components, which are:
-- Router
+- BrowserRouter
 - Route
 - Switch
 - Link
 - Redirect
 
-### \<Router\>
+### BrowserRouter
 This is the top level component that you will wrap all of your other components in.
 *Sidenote*
-> If using redux, Router will go inside of redux’s Provider component.  Also, there is a weird thing where components using connect won’t rerender.  To make them rerender, you must wrap the connect call with react-router’s withRouter higher order function
+> If using redux, BrowserRouter will go inside of redux’s Provider component.  Also, there is a weird thing where components using connect won’t rerender.  To make them rerender, you must wrap the connect call with react-router’s withRouter higher order function
 
 ```js	
 class MyConnectedComponent extends React.Component{
@@ -34,17 +34,43 @@ class MyConnectedComponent extends React.Component{
 export default withRouter(connect()(MyConnectedComponent));
 ```
 
-One way of using Router, would be to have an index.js file that will wrap you main app.js file.  app.js would have your top bar/navigation and then your initial routes.
-You can also embed Routes in your ReacDOM render call, just make sure only one Child component is under the Router component.  This can easily be done by wrapping Routes in a \<div\>.
+One way of using BrowserRouter, would be to have an index.js file that will wrap you main app.js file.  app.js would have your top bar/navigation and then your initial routes.
+You can also embed Routes in your ReacDOM render call, just make sure only one Child component is under the BrowserRouter component.  This can easily be done by wrapping Routes in a \<div\>.
 
-As I start working more with this, you can see where you can use routes deeper within the application to conditionally show components.
+As I start working more with this, I can see where you can use routes deeper within the application to conditionally show components.
 
-### \<Route path=‘/‘ component={} /\>
+Here is an example of an the initial component with the BrowserRouter wrapping other Routes:
+```javascript
+import {
+  BrowserRouter,
+  Route
+} from 'react-router-dom';
+...
+const App = () => (
+  <BrowserRouter>
+    <div className="container">
+      <Header /> //Will always show 
+      //Routes below will conditionally show.
+      <Route exact path="/" component={Home} />
+      <Route path="/about" render={ () => <About title='About' /> } />
+      <Route path="/teachers" component={Teachers} />
+      <Route path="/courses" component={Courses} />
+    </div>
+  </BrowserRouter>
+);
+```
+
+### Route
 
 Route is the component that you will use to define your routes.  Here are the basic props:
 - **path** - This is the path to match to.  Begins with ‘/‘
 - **exact** - Boolean, just include if you want an exact match
 - **component** or **render** - either pass a component or you can pass a anonymous function.
+
+If you need to pass props to a component, then you would need to use the "render" option in Route:
+```javascript
+<Route path="/about" render={() => <About title="my About" /> } />
+```
 
 ### Dynamic Routes
 You can also make routes dynamic.  For example, if you wanted to have a path to an item include the item id or name as part of the path, you can use a colon in front of the dynamic part of the path:
@@ -70,6 +96,28 @@ Here is an example:
 	      }}
 	/>
 ```
+### Link and NavLink
+Link and NavLink components allow you to create links to specific routes.
+The main difference between the two is that NavLink will give an "active" class name to the last NavLink clicked.
+
+```javascript
+    <ul className="main-nav">
+      <li><NavLink exact to="/">Home</NavLink></li>
+      <li><NavLink to="/about">About</NavLink></li>
+      <li><NavLink to="/teachers">Teachers</NavLink></li>
+      <li><NavLink to="/courses">Courses</NavLink></li>
+    </ul>
+```
+If you want the active class name to be something other than "active", you can pass the **activeClassName** prop and send your custom class name through.  May be useful when each link that is active looks different than the others.
+
+You can even pass the active style if you want to override some of the active class name's properties.  This is done with the **activeStyle** prop.  You will pass this prop a style object.  Note that the **active** class name is still applied and then this style object will override whatever you pass or simply add more style to the link when active.
+
+```javascript
+      <li><NavLink to="/teachers" activeStyle={{ background: "blue"}}>Teachers</NavLink></li>
+      <li><NavLink to="/courses" activeClassName="myActiveClass">Courses</NavLink></li>
+```
+
+
 
 # React-Router v2
 
