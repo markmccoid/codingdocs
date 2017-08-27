@@ -117,6 +117,142 @@ You can even pass the active style if you want to override some of the active cl
       <li><NavLink to="/courses" activeClassName="myActiveClass">Courses</NavLink></li>
 ```
 
+### Redirect
+The Redirect component allows you to programatically go to a route.  Keep in mind that, by default, the current location is replaced by the new one.
+
+If you want to push a new entry onto the history instead, pass a push prop as well.
+
+```javascript
+//add to history
+<Redirect to="/courses/html" push/>
+```
+
+When redirecting from nested routes, you may want to take a different approach with the Redirect component.  For example, if you go to a page with nested routes and want to have that page when first loaded "/courses" show one of the routes by default, you will want to put the Redirect **inside** a Route component of its own:
+
+```javascript
+    <Route exact path="/courses" render={() => <Redirect to="/courses/html" />} />
+    <Route path="/courses/html" component={HTML} />
+    <Route path="/courses/css" component={CSS} />
+    <Route path="/courses/javascript" component={Javascript} />
+```
+Note the use of **exact** and then using the **render** prop to render our Redirect component.
+
+### Redirect using the history prop
+There will be times when you will not be able to render a Redirect component, but still need to navigate to a new path.
+
+In these cases you can use the history prop passed to all components rendered from a Route component.
+
+```javascript
+class Home extends React.Component {
+	handleSubmit = (e) => {
+		e.preventDefault();
+		let something = e....value;
+		this.props.history.push(newPath);
+	}
+	render() {
+		<form onSubmit={this.handleSubmit}>
+			...
+		</form>
+	}
+}
+```
+
+### match prop
+Each route that we redirect or link to gets a set of props that we can use in various ways.
+
+![](https://dl.dropboxusercontent.com/s/hj8hn1mb48lhqoq/reacrouter-props.png)
+
+[React Router match doc](https://reacttraining.com/react-router/web/api/match)
+
+A match object contains information about how a \<Route path> matched the URL. match objects contain the following properties:
+- params - (object) Key/value pairs parsed from the URL corresponding to the dynamic segments of the path
+- isExact - (boolean) true if the entire URL was matched (no trailing characters)
+- path - (string) The path pattern used to match. Useful for building nested <Route>s
+- url - (string) The matched portion of the URL. Useful for building nested <Link>s
+
+You’ll have access match objects in various places:
+- Route component as this.props.match
+- Route render as ({ match }) => ()
+- Route children as ({ match }) => ()
+- withRouter as this.props.match
+- matchPath as the return value
+
+If a Route does not have a path, and therefore always matches, you’ll get the closest parent match. Same goes for withRouter.
+
+```javascript
+import React from 'react';
+import { Route, NavLink, Redirect } from 'react-router-dom';
+import HTML from './courses/HTML';
+import CSS from './courses/CSS';
+import Javascript from './courses/JavaScript';
+
+const Courses = ({match, }) => (
+  <div className="main-content courses">
+    <div className="course-header group">
+      <h2>Courses</h2>
+      <ul className="course-nav">
+        <li><NavLink to={`${match.url}/html`}>HTML</NavLink></li>
+        <li><NavLink to={`${match.url}/css`}>CSS</NavLink></li>
+        <li><NavLink to={`${match.url}/javascript`}>JavaScript</NavLink></li>
+      </ul>
+    </div>
+
+    <Route exact path={`${match.path}`} render={() => <Redirect to={`${match.path}/html`} />} />
+    <Route path={`${match.path}/html`} component={HTML} />
+    <Route path={`${match.path}/css`} component={CSS} />
+    <Route path={`${match.path}/javascript`} component={Javascript} />
+  </div>
+);
+
+export default Courses;
+```
+By doing the above, if you ever change the route that links to this component, you won't break your nested routes.
+
+### Displaying 404 Error Routes using Switch
+[Switch React Router V4 Docs](https://reacttraining.com/react-router/web/api/Switch)
+
+If you have a list of Route components, without Switch it is very possible that multiple routes will match and multiple routes will be renedered.
+
+This is by design so advanced stuff could be done with Route components.
+
+If, however, you wrap a bunch of Route components in a Switch component, then the first Route that matches will render and that is it.
+
+```javascript
+import { Switch, Route } from 'react-router'
+
+<Switch>
+  <Route exact path="/" component={Home}/>
+  <Route path="/about" component={About}/>
+  <Route path="/:user" component={User}/>
+  <Route component={NoMatch}/>
+</Switch>
+```
+
+### Creating Dynamic Routes Paths
+You can create Route parameters by putting a colon in front of the parameter:
+
+```javascript
+<Route path="/teachers/:name" component={Teachers} />
+```
+
+The **:name** is the parameter and it will be made available to the Teachers component via the passed route props.
+
+![]](https://dl.dropboxusercontent.com/s/gykblaxe43nw603/reacrouter-props-match.png)
+
+You can access this parameter via **props.match.params.paramName**.
+
+You can even add multiple parameters in a single path:
+
+```javascript
+<Route path="/teachers/:topic/:fname-:lname" component={Teachers} />
+
+//Teachers component
+const Teachers = ({ match }) => {
+	let name = `${match.params.fname} ${match.params.lname}`;
+	let topic = match.params.topic;
+}
+```
+[React Router v4 URL Params](https://reacttraining.com/react-router/web/example/url-params)
 
 
 # React-Router v2
