@@ -1,5 +1,6 @@
 - [Home](/)
 - Javascript Fundamentals
+	- [Language Basic](/Javascript/languageBasics)
 	- [Naming Conventions](/Javascript/namingConventions)
 	- [Promises](/Javascript/promises)
 	- [Keyboard-Mouse Input](/Javascript/keyboardMouseInput)
