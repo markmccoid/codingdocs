@@ -28,7 +28,7 @@ I have found that it works best to set up the linting stuff globally on your sys
 
 Here are the items that need to be installed globally via **npm** for the airbnb es lint options.
 
-```powershell
+```
 > npm install eslint eslint-config-airbnb --global  
 > npm install eslint-plugin-jsx-a11y@^2.0.0 eslint-plugin-react eslint-plugin-import babel-eslint --global  
 ```

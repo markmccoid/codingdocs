@@ -2,11 +2,11 @@
 The main parts of the redux flow for react are:
 
 3. &lt;Provider&gt;&lt;/Provider&gt; component
-3. The store
-3. Middleware - applyMiddleware()
-3. actions and their Action Creators
-3. reducers
-3. The connect function
+4. The store
+5. Middleware - applyMiddleware()
+6. actions and their Action Creators
+7. reducers
+8. The connect function
 
 Very similar to ES5 syntax, but a bit different when using the connect() function.
 
@@ -126,7 +126,7 @@ If it receives a promise, it will dispatch the resolved value of the promise. It
 This makes it so that we do not have to deal with the promise, it will only dispatch the action if and when the promise resolves.
 
 **redux thunk** can also deal with promises as well as a number of other situations.  
- 
+
  **Setup Example:** 
 
 ```javascript
@@ -368,5 +368,17 @@ Middleware is
 Some useful pieces of middleware are:
 
 3.  [redux-logger ](https://github.com/evgenyrodionov/redux-logger) - Which is a logger/debugger for redux
-3. redux-promise
-3. redux-thunk
+4.  redux-promise
+5.  redux-thunk
+
+
+
+## Selectors
+
+Selectors are not a feature of redux or external library, but a concept.
+
+Selectors are just regular functions, but they can be used to modify state data.
+
+Here is a great video overview:
+[Redux Selectors](https://www.youtube.com/watch?v=frT3to2ACCw)
+
