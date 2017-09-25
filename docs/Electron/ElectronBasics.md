@@ -7,7 +7,7 @@
 I like to think of an Electron application as have two pieces, just like a web application.  
 
 1. The Backend Server - this is the Electron process
-1. The Web App - this is the UI
+2. The Web App - this is the UI
 
 These two processes cannot directly communicate.  You will need to use the [IPC](#ipc-inter-process-communication) to communicate.
 
@@ -399,8 +399,56 @@ function createAddWindow() {
   addWindow.on('closed', () => addWindow = null);
 }
 ```
+**Example use case:**
+
+Let's say I want to show a help guide when the user selects a menu option.  
+
+I can set up the menu option to call a **showUserGuide** function.
+
+```javascript
+//------------------------------------------------
+//Setup Help window function to show help from menu
+//The showUserGuide function is called from the Help/User Guide menu option
+let helpWindow;
+const showUserGuide = () => {
+  //If helpWindow already defined, give it focus and leave function
+  if (helpWindow) {
+    helpWindow.focus();
+    return;
+  }
+  //Define new BrowserWindow
+  helpWindow = new BrowserWindow({
+    width: 1000,
+    height: 1000,
+    title: 'Analytix Installer User Guide',
+    icon: path.join(__dirname, 'assets/icon.ico')
+  });
+  //When use closes help window, null its variable
+  helpWindow.on('closed', () => {
+    helpWindow = null;
+  });
+  //Load help file HTML file into BrowserWindow
+  helpWindow.loadURL(`file://${__dirname}/public/EAInstallerHelp.html`);
+};
+```
+
+We must set up the ***helpWindow*** variable outside the function so that is can be accessed later.
+
+Since we don't want multiple instances of the User Guide window to be opened, we can check to see if the ***helpWindow*** variable has been initialized and if so, just give it focus.  If not, then create the window.
+
+We will need to set the variable ***helpWindow*** to null on the 'closed' event.
+
+-----
+
+## Creating Native Dialogs 
+
+[Electron Dialog Docs](https://electron.atom.io/docs/api/dialog/)
+
+You can create the Open, Save and standard Message box dialogs.
+
 -------
-## Using Remote 
+## Using Remote
+
 [Remote Docs](https://github.com/electron/electron/blob/master/docs/api/remote.md)
 The remote module provides a simple way to do inter-process communication (IPC) between the renderer process (web page) and the main process.
 
