@@ -4,6 +4,7 @@
   - [Language Basic](/Javascript/languageBasics)
   - [Naming Conventions](/Javascript/namingConventions)
   - [Promises](/Javascript/promises)
+  - [Async Await](/Javascript/async-await)
   - [Keyboard-Mouse Input](/Javascript/keyboardMouseInput)
   - [Axios](/Javascript/axios)
   - [Firebase](/Javascript/firebase)
