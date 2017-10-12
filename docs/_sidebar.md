@@ -1,5 +1,6 @@
 - Code Docs
   - [Javascript](/Javascript/)
+  - [Javascript Libraries](/JSLibraries/)  
   - [Node](/Node/)
   - [Electron](/Electron/)
   - [Markdown](/Markdown/)
