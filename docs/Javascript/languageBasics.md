@@ -1,8 +1,8 @@
 ## && and || Logical Operators
 
 Two important things to know about these operators:
-  1. They short-circuit evaluations
-  2. They evaluate to their last evaluated operator
+    1. They short-circuit evaluations
+    2. They evaluate to their last evaluated operator
 
 **Short-circuiting Evaluations**
 For **&&** This means that if the first operand evaluates to false, the second operand is never evaluated.  This can be used to hide and show values based on an operand that evaluates to a boolean:
@@ -39,3 +39,27 @@ If you want to get the actual boolean returned, then you can use the logical not
 !!('cat' && 'dog')
 //returns true
 ```
+## Destructuring 
+
+Allows you to pull variables out of object easily:
+
+```javascript
+const person = {
+  name: 'mark',
+  age: 19,
+  address: {
+    street: '5068 ...',
+    city: 'wherever',
+    state: 'confusion'
+  } 
+};
+
+let { name, age } = person;
+//If you want to rename:
+let { name: firstName, age } = person;
+//If you want to set a default value
+let { name, age = 18 } = person;
+//If you want to rename and set a default value
+let { name, age: drinkingAge = 18 } = person;
+```
+
