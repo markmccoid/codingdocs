@@ -372,7 +372,6 @@ Some useful pieces of middleware are:
 5.  redux-thunk
 
 
-
 ## Selectors
 
 Selectors are not a feature of redux or external library, but a concept.
@@ -381,4 +380,8 @@ Selectors are just regular functions, but they can be used to modify state data.
 
 Here is a great video overview:
 [Redux Selectors](https://www.youtube.com/watch?v=frT3to2ACCw)
+
+## Redux DevTools Extension
+
+[Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension)
 

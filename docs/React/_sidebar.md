@@ -1,5 +1,6 @@
 - [Home](/)
 - React
-	- [React Basics](/React/ReactBasics)
-	- [React Router](/React/ReactRouter)
-	- [React ES6](/React/ReactWithClasses)
+  - [React Basics](/React/ReactBasics)
+  - [React Router](/React/ReactRouter)
+  - [React ES6](/React/ReactWithClasses)
+  - [React Components](/React/ReactComponents) - Useful third party react components (some also in the Third Party section)
