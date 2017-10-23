@@ -1,29 +1,48 @@
 # Firebase
 
-[FirebaseDocs](https://firebase.google.com/docs/reference/js/firebase.database.Reference "Firebase Docs")
+[Firebase Web Starting Docs](https://firebase.google.com/docs/database/web/start)
+
+[Firebase Database Ref Docs](https://firebase.google.com/docs/reference/js/firebase.database.Reference "Firebase Docs")
 
 ## Basics
 
 To set up firebase in an application, you will first need to grab the configuration script from the firebase site. Note, this will be different for each Database you use.
 
+When you are in your new database application area, click on the **Overview** menu option on the left and choose to get the configuration for the web.
+
 ```javascript
-	 var config = {
-	 apiKey: "AIzaSyBAzSz_q2QERnV6LNoJmKjdgexMU",
-	 authDomain: "mccoid-todo.firebaseapp.com",
-	 databaseURL: "https://mccoid-todo.firebaseio.com",
-	 storageBucket: "mccoid-todo.appspot.com",
-	 messagingSenderId: "338882228094"
-	 };
-	 firebase.initializeApp(config);
+var config = {
+  apiKey: "AIzaSyBs7pnXGSlMYtin7tEtTijRYR_iBLRmz-A",
+  authDomain: "expensify-e6b86.firebaseapp.com",
+  databaseURL: "https://expensify-e6b86.firebaseio.com",
+  projectId: "expensify-e6b86",
+  storageBucket: "expensify-e6b86.appspot.com",
+  messagingSenderId: "730922088689"
+};
+firebase.initializeApp(config);
 ```
 
-After config, you can get access to the root of your database using:
+## .database() Functions
+
+Once you have run the *initializeApp* function, passing it your "config" object, you will then have access to all of Firebase's capabilities.
+
+One of the main capabilities that you will be using is the database functions.  To access these database functions you will use:
+
+```javascript
+var firebaseDB = firebase.database()
+```
+
+[database() docs](https://firebase.google.com/docs/reference/js/firebase.database.Database)
+
+But most often you will want to get to the database reference.  Do this as follows:
 
 ```javascript
 var firebaseRef = firebase.database().ref();
 ```
 
 The above assumes you have imported firebase into your application and called it "firebase".
+
+Note that the above "ref" is giving you access to your DB root.  You can think of a ref() as a reference to a location in your database.  It could be a table or a row.  
 
 You can now use firebaseRef to manipulate your database. 
 
@@ -88,13 +107,17 @@ Here the newNoteRef is a reference to this new item and one of the properties of
 # Adding/Updating Data/Deleting
 [FirebaseDocs](https://firebase.google.com/docs/reference/js/firebase.database.Reference "Firebase Docs")
 
-## Set
+First thing to understand when using the following firebase functions is that they are all asynchronous and return promises.
+
+## [Set](https://firebase.google.com/docs/reference/js/firebase.database.Reference#set)
 
 Set will destroy and create. Meaning, if something exists at the node you are setting, it will be removed and then whatever set is creating will be created.
 
-So, you can pass in anything you want, even a structure that is different.  Just know that set is going to removed what was at the ref and replace it with the object you are sending in:
+So, you can pass in anything you want, even a structure that is different.  Just know that set is going to removed what was at the ref and replace it with the object you are sending in.
 
-## Update
+Set's promise does not return a value when it completes.
+
+## [Update](https://firebase.google.com/docs/reference/js/firebase.database.Reference#update)
 
 Update will do exactly what it says, it will update whatever node you have a reference to. You do not have to pass all of the items in the node, just the ones that you want to update.
 
@@ -112,6 +135,48 @@ updRef.update({age: 46});
 ```
 
 If you run an update and no item exists to update, it will be created.
+
+If you want to remove a piece of data with an update, pass **null** as the updated value.  Want to add data that doesn't exist in ref, just include it in object.  Want to update an existing piece of data, just include it.
+
+```javascript
+//A call to update, can Update, Remove (by passing null) and Add
+firebase.database().ref('attributes')
+  .update({
+    height: 70,
+    IQ: 143,
+    weight: null
+  });
+```
+
+Below are the before and after snapshots of the database after the above update.
+
+![firebase-01](C:\Users\mark.mccoid\Dropbox\md-images\jsdocs\firebase-01.png)
+
+What if I wanted to perform the same updates as above, but also change the **age** property using only one update.
+
+This can be done, but you first must understand that you cannot directory update nested objects.
+
+```javascript
+firebase.database().ref().update({
+    age: 35,
+  	attributes: {
+        IQ:143
+    }
+})
+```
+
+The above would make the attributes property equal to only the IQ property.  To do this, you need to use a bit of odd syntax:
+
+```javascript
+firebase.database().ref().update({
+  age: 35,
+  'attributes/IQ': 143,
+  'attributes/height': 70,
+  'attributes/weight': null,
+});
+```
+
+
 
 ## Delete data (Remove)
 **remove(onComplete)** returns firebase.Promise containing void
