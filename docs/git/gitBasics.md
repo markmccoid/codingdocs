@@ -1,4 +1,5 @@
 ## Basic Git Commands
+
 - **git status** - shows the status of your repository.  Things like changed files, staged files, and if you are out of sync with the remote
 - **git add .** OR **git add -A** - This command will stage for commit all updated and new, untracked files.  
 - **git add -u** - This will add all files that have been updated. The -u specifies to get all updated files. Similar to the *add .*, but will not get new, untracked files.
@@ -12,7 +13,7 @@
 - **git log --oneline** - shows log of actions.  the oneline is optional, but makes reading easier.
 - **git log --graph --oneline --all --decorate** - view of commits and branches, etc.
 - **git remote add remotename remotelocation** - a remote is where the repository is located and shared from.  I'm using github.com.  You can have multiple remotes, but at this point, for small project without others working, won't be needed.  
-```git remote add origin https://github.com/markmccoid/QlikVariableEditor.git```
+  ```git remote add origin https://github.com/markmccoid/QlikVariableEditor.git```
 
 ## Fetch, Pull, Push
 *git fetch* will pull down changes but will not merge them.  You would normally do a *git merge* after the fetch.
@@ -93,8 +94,8 @@ You can view anything that has been stashed using: `git stash list`
 
 ## Removing a file from tracking
 1. Update your .gitignore file – for instance, add a folder you don't want to track to .gitignore .
-1. git rm -r --cached folder (or files) – Remove all tracked files, including wanted and unwanted. Your code will be safe as long as you have saved locally.
-1. git add . – All files will be added back in, except those in .gitignore .
+2. git rm -r --cached folder (or files) – Remove all tracked files, including wanted and unwanted. Your code will be safe as long as you have saved locally.
+3. git add . – All files will be added back in, except those in .gitignore .
 
 Note that on the next pull it will delete said folder or files. To work around this, make a backup copy of these file and then after executing the above steps do a pull and then restore the folder/files.
 
@@ -116,3 +117,51 @@ This will create an entry in the *.gitconfig* file's [alias] section.  Usually l
 [alias]
 	lga = log --graph --oneline --all --decorate
 ```
+## SSH Setup
+
+First, check to see if you have any SSH keys setup.  You **MUST** use git bash or other terminal (cmder, etc) that can run unix commands.
+
+This command will show you if you have ssh setup.  
+
+```
+> ls -a ~/.ssh
+```
+
+If you don't have it setup, do the following. [Connecting To GitHub with SSH](https://help.github.com/articles/connecting-to-github-with-ssh/)
+
+```
+// -t is the type of ssh (rsa is very common)
+// -b is the byte size of key (4096 is recommended)
+// -C is the comment, put your email here
+> ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+```
+
+This command will prompt you for the filename, just take the default **id_rsa**.
+
+It will then prompt for a passcode, do not enter one.
+
+Next you must add your SSH key to the ssh-agent
+
+```
+> eval "$(ssh-agent -s)"
+//Now add your key to the ssh agent
+> ssh-add ~/.ssh/id_rsa
+```
+
+**Copy your public key to the clipboard**
+
+```
+//Windows
+> clip < ~/.ssh/id_rsa.pub
+//Mac
+> pbcopy < ~/.ssh/id_rsa.pub
+```
+
+**Add To Your GitHub Account**
+
+Now you need to add this public key to your GitHub account.
+
+Go to your GitHub account page and click on the "SSH and GPG Keys" section and click "New SSH key".
+
+
+
