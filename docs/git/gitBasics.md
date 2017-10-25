@@ -163,5 +163,10 @@ Now you need to add this public key to your GitHub account.
 
 Go to your GitHub account page and click on the "SSH and GPG Keys" section and click "New SSH key".
 
+```
+//command to check if working
+> ssh -T git@github.com
+```
+
 
 

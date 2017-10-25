@@ -76,6 +76,56 @@ And then add the following to the **module** object's **rule** array in the webp
 
 ### Setting up SCSS in Webpack
 
+If we also want to use CSS, we will need the sass-loader as well and a new rule or we can repurpose the CSS rule.
+
+First let's look at adding a new rule:
+
+```javascript
+ module: {
+    rules: [{
+      loader: 'babel-loader',
+      test: /\.js$/,
+      exclude: /node_modules/
+    },
+    { //HERE IS THE CSS PART
+      test: /\.css$/,
+      use: [
+        'style-loader',
+        'css-loader'
+      ]
+    },
+    {
+      test: /\.scss$/,
+      use: [
+        'style-loader',
+        'css-loader',
+        'sass-loader'
+       ]
+    }
+   ]
+  },
+```
+
+Or you could just modify your regular expression in your CSS case and add on the sass-loader at the end.  It seems that webpack is smart enough to handle both CSS and SCSS files with one rule.
+
+```javascript
+    module: {
+      rules: [{
+        loader: 'babel-loader',
+        test: /\.js$/,
+        exclude: /node_modules/
+      },
+      {
+        test: /\.s?css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'sass-loader'
+        ]
+      }]
+    }, 
+```
+
 
 
 ### CSS Modules
@@ -140,7 +190,103 @@ test: /\.css$/,
 
 *modules:* will tell webpack to use modules and *localIdentName:* will tell it how to name, which will be name of component, [local] is the css class name and then the first 5 characters of the hash.
 
-## Webpack Dev Server
+### Extract-Text-Webpack-Plugin for CSS ([Docs](https://github.com/webpack-contrib/extract-text-webpack-plugin))
+
+This plugin allows you to extract some text from Webpack.  The usage explained in this section is so that we can get a separate CSS files from our SASS/SCSS and CSS files and another for our JavaScript.
+
+Here is what needs to be done:
+
+1. import the plugin into our webpack config file
+
+   ```javascript
+   const ExtractTextPlugin = require('extract-text-webpack-plugin');
+   ```
+
+2. Create new instance of the ExtractTextPlugin. 
+
+   ```javascript
+   module.exports = (env) => {
+     const isProduction = env === 'production';
+     //--This is setting up a new instance(function), telling it what file to create
+     //--from the extracted text.
+     const CSSExtract = new ExtractTextPlugin('styles.css');
+   ```
+
+3. Setup a rule in the module(object)/rules(array).  This rule will replace the CSS/SCSS rule.  Note that we no longer need the style-loader as this loader was used to in-line the styles.
+
+   ```javascript
+       module: {
+         rules: [{
+           loader: 'babel-loader',
+           test: /\.js$/,
+           exclude: /node_modules/
+         },
+         {
+           test: /\.s?css$/,
+           use: CSSExtract.extract({
+             use: [
+               'css-loader',
+               'sass-loader'
+             ]
+           })
+         }]
+       },
+   ```
+
+4. add it to the plugins array in webpack config file
+
+   ```
+       ,
+       plugins: [
+         CSSExtract
+       ],
+   ```
+
+When you push all these guys into a single CSS file, you will lose the ability to see which source file they came from when inspecting in chrome.  One way to fix this is to add the source map option onto the css and sass loaders and then change the devtool option.
+
+```javascript
+ module: {
+      rules: [{
+        loader: 'babel-loader',
+        test: /\.js$/,
+        exclude: /node_modules/
+      },
+      {
+        test: /\.s?css$/,
+        use: CSSExtract.extract({
+          use: [
+            {
+              //The use property is now using an array of objects instead
+              //of an array of strings.  This allows us to add an options
+              //section where we tell it to set "sourceMap" to true.
+              loader: 'css-loader',
+              options: {
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true
+              }
+            }
+          ]
+        })
+      }]
+    },
+    plugins: [
+      CSSExtract
+    ],
+    //To use the source map options we change the devtool for development from 
+    //"inline-cheap-source-map" to "inline-source-map"
+    devtool: isProduction ? 'source-map' : 'inline-source-map',
+```
+
+[Webpack devtool Options](https://webpack.js.org/configuration/devtool/)
+
+Please note that this is only one way to configure the Plugins and other stuff
+
+##Webpack Dev Server
 
 The *webpack-dev-server* is a little Node.js [Express](http://expressjs.com/) server, which uses the *webpack-dev-middleware* to serve a *webpack bundle*. It also has a little runtime which is connected to the server via [Sock.js](http://sockjs.org/).
 
@@ -208,6 +354,12 @@ Our **.babelrc** file will now look like this:
   ]
 }
 ```
+
+
+
+## Production Build
+
+[Webpack.js.org Production Docs](https://webpack.js.org/guides/production/)
 
 
 
