@@ -10,6 +10,7 @@ const app = express();
 const path = require('path');
 
 const publicPath = path.join(__dirname, '..', 'public');
+const port = process.env.PORT || 3000;
 
 app.use(express.static(publicPath));
 
@@ -19,7 +20,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log(`Server is running on port ${3000}`);
 });
 
@@ -68,4 +69,32 @@ OR
 Here we are using our basic express server.  
 
 When Heroku tries to start your application, it looks in package.json for your "start" script. 
+
+```json
+"start": "node server/server.js",
+```
+
+This will tell heroku which file to run.  However, within our server.js code, we need to add a little code to run on the port Heroku tells us to.
+
+Heroku will set the *process.env.PORT* environment variable that we can use to make sure we are listening on the correct port:
+
+```javascript
+const port = process.env.PORT || 3000;
+```
+
+### Teach Heroku to Build Your Application
+
+Now that Heroku can run our server, it still needs to build the application with webpack.  You will get this done by creating a script called **"heroku-postbuild"** in **package.json**.  This script will be run after the Heroku server gets spun up:
+
+```json
+"heroku-postbuild": "yarn run build:prod"
+```
+
+### Final Notes
+
+When your application runs on Heroku, it will only be using the **dependencies ** modules from your *package.json* file.  If you want to test this locally, you can run the following command to only install your non dev dependencies:
+
+```
+> yar install --production
+```
 

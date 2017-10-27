@@ -307,7 +307,7 @@ module.exports = {
   module: {...},
   devtool: 'cheap-module-eval-source-map',
   devServer: {
-      contentBase: path.join(__dirname, '/public')
+      contentBase: path.join(__dirname, 'public')
   }
 };
 ```
@@ -326,6 +326,20 @@ You will then need to create a script in **package.json** to run the dev server:
 ```
 
 **NOTE:** The webpack dev server doesn't create a physical bundle.js when running.  When you need the physical bundle.js file, you will need to run the webpack command (build script above) to generate the file.
+
+**publicPath** option will need to be used if you decide to put the bundle.js file in a directory other than the root.
+
+[webpack docs on publicPath](https://webpack.js.org/configuration/dev-server/#devserver-publicpath-)
+
+```json
+    devServer: {
+      contentBase: path.join(__dirname, 'public'),
+      historyApiFallback: true,
+      publicPath: '/dist/'
+    }
+```
+
+Lastly, the **historyApiFallback** option drops us back to the **index.html** whenever there is a 404 error.  This is so that our routing engine can deal with the routing versus expecting the server to route.
 
 ## Babel Options and Presets
 
