@@ -90,11 +90,38 @@ Now that Heroku can run our server, it still needs to build the application with
 "heroku-postbuild": "yarn run build:prod"
 ```
 
-### Final Notes
+### Setting up process.env Variable in Heroku
+
+This is helpful if in your code, you are accessing things like DB username/passwords and Firebase configuration information.  
+
+You will set this up via the Heroku CLI
+
+Heroku CLI comes with a config command:
+
+```
+//Show me my config KEY=value pairs
+> heroku config
+
+//Let me create my KEY=value pairs (space separated)
+> heroku config:set KEY1=value KEY2=value
+
+//Let me remove my KEY=value pairs
+> heroku config:unset KEY1
+```
+
+### Push Your Application to Heroku
+
+```javascript
+> git push heroku master
+```
+
+
+
+###Final Notes
 
 When your application runs on Heroku, it will only be using the **dependencies ** modules from your *package.json* file.  If you want to test this locally, you can run the following command to only install your non dev dependencies:
 
 ```
-> yar install --production
+> yarn install --production
 ```
 
