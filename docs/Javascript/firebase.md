@@ -309,3 +309,46 @@ Here is a basic usage with the assumption that we are authenticating through fir
 	}
 }
 ```
+To setup your app to use firebase as the authenticator, you will need to first log into your firebase console and go to the DB you are working with, *Authentication* section and then choose your sign in method.
+
+We will review the Google provider here.
+
+To start, simply enable the google provider and click save![firebase-auth01](C:\Users\mark.mccoid\Dropbox\md-images\jsdocs\firebase-auth01.png)
+
+Next, you will need to define your "googleProvider" variable, usually added to your firebase configuration file:
+
+```javascript
+//firebase.js
+import * as firebase from 'firebase';
+
+const config = {
+  ...
+}
+firebase.initializeApp(config);
+const database = firebase.database();
+  
+//!!Here we are defining our googleProvider
+const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+
+export { firebase, googleAuthProvider, database as default };
+
+```
+
+### Checking State of Login
+
+**i.e. Is the user logged in**
+
+You can use the following snippet to setup a function that will be called whenever the state of the firebase Auth has changed:
+
+```javascript
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    console.log(`logged in`);
+  } else {
+    console.log(`logged out`);
+  }
+});
+```
+
+
+
