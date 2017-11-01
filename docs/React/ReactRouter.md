@@ -21,8 +21,12 @@ We will review the main components, which are:
 - Redirect
 
 ### BrowserRouter
-This is the top level component that you will wrap all of your other components in.
+This is the top level component that you will wrap all of your other components in.   In **Electron** I found using MemoryRouter worked better and if you need to have access to your own history component, use just the **Router** component.
+
+[Router](#Router)
+
 *Sidenote*
+
 > If using redux, BrowserRouter will go inside of redux’s Provider component.  Also, there is a weird thing where components using connect won’t rerender.  To make them rerender, you must wrap the connect call with react-router’s withRouter higher order function
 
 ```js	
@@ -59,6 +63,60 @@ const App = () => (
   </BrowserRouter>
 );
 ```
+
+### Router
+
+Router is similar to BrowserRouter, except Router expects you to inject the history object to it.  To do this, we need to use another module.  [**history**](https://www.npmjs.com/package/history)
+
+```
+> yarn add history
+```
+
+Once installed you will need to load it into your project.  Since you will be injecting 'it' into the Router component, you will need to load it at that level:
+
+```javascript
+import { Router, Route, Switch } from 'react-router-dom';
+import createHistory from 'history/createBrowserhistory';
+...
+//Export so that it can be used elsewhere...that is why we are using
+//Router instead of BrowserRotuer!
+export const history = createHistory();
+
+const AppRouter = () => (
+  <Router history={history}>
+    <div>
+      <Header />
+      <Switch>
+        <Route exact path="/" component={Login} />
+        <Route path="/dashboard" component={ExpenseDashboardPage} />
+        <Route path="/create" component={AddExpensePage} />
+        <Route path="/edit/:id" component={EditExpensePage} />
+        <Route path="/help" component={HelpPage} />
+        <Route component={NotFound} />
+      </Switch>
+    </div>
+  </Router>
+);
+
+export default AppRouter;
+
+```
+
+To use your *history*  variable elsewhere, you could do the following:
+
+```javascript
+import AppRouter, { history } from './routers/AppRouter';
+
+//With history import, I can use it on pages that are 
+//not descendants (i.e. wrapped in my Router component)
+if(!loggedin) {
+  history.push('/');
+}
+```
+
+
+
+
 
 ### Route
 
@@ -284,7 +342,7 @@ ReactDOM.render(
 	</Provider>
 	, document.querySelector('.container'));
 ```
-	
+
 The above example also has redux, but you can see that the Router component has history and routes props. The history prop can take either "browserHistory", "hashHistory" and something else I can't remember.
 The browser history means that it will be looking for routes immediately after the /. The hash history will be looking for routes after a /#.
 You will also set up a routes.js files that will define all the routes.
