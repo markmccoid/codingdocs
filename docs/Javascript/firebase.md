@@ -343,7 +343,7 @@ You can use the following snippet to setup a function that will be called whenev
 ```javascript
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    console.log(`logged in`);
+    console.log(`logged in as ${user.uid}`);
   } else {
     console.log(`logged out`);
   }

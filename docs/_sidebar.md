@@ -13,4 +13,5 @@
   - [Third Party Tools](/ThirdParty/)
   - [Code Editors](/CodeEditors/)
   - [Component Library](/ComponentLibrary/)
+  - [Cookbook](/Cookbook/)
 
