@@ -291,7 +291,9 @@ The on() listener can also look for **child\_removed** and **child\_changed**
 
 [Manage Users in Firebase | Firebase](https://firebase.google.com/docs/auth/web/manage-users)
 
-## Authentication Rules
+**NOTE:** Once you deploy to a URL other than localhost, you will need to got into the *Authentication* section and add the url where the application lives.
+
+### Authentication Rules
 
 These rules define who can see what parts of your data tree.
 
@@ -299,16 +301,91 @@ Here is a basic usage with the assumption that we are authenticating through fir
 
 ```javascript
 {
-	"rules": {
-		"users": {
-			"$uid": {
-				".write": "$uid === auth.uid",
-				".read": "$uid === auth.uid"
-				}
-			}  
-	}
+  "rules": {
+    ".read": false,
+    ".write": false,
+      "users": {
+        "$uid": {
+          ".write": "$uid === auth.uid",
+          ".read": "$uid === auth.uid"
+        }
+      }  
+    }
 }
 ```
+There is much more that we can do in our authentication section.  We can further limit what the users can write to the database.  Once we know our structure, we can add these items.
+
+For example, if we had a structure where our application wrote a single object (the expenses object) to the database, we could lock it down like this:
+
+```json
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "users": {
+      "$user_id": {
+        ".read": "$user_id === auth.uid",
+        ".write": "$user_id === auth.uid",
+      "expenses": {
+          ".validate": true
+      },
+      "$other": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}
+```
+
+In the above example, users would only be able to write to the expenses "section" of the database.  The **"$other"** variable would catch any other reads or writes and invalidate them.
+
+You can take it one step further and lock down the specific fields you are going to write:
+
+```javascript
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "users": {
+      "$user_id": {
+        ".read": "$user_id === auth.uid",
+        ".write": "$user_id === auth.uid",
+      "expenses": {
+        "$expense_id": {
+					".validate": "newData.hasChildren(['description', 'note', 'createdAt', 'amount'])", 
+          "description": {
+            ".validate": "newData.isString() && newData.val().length > 0"
+          },
+          "note": {
+            ".validate": "newData.isString()"
+          },
+          "createdAt": {
+            ".validate": "newData.isNumber()"
+          },
+          "amount": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      },
+      "$other": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}
+```
+
+
+
+[Firebase Security Rules API](https://firebase.google.com/docs/reference/security/database/)
+
+### Auth Provider
+
 To setup your app to use firebase as the authenticator, you will need to first log into your firebase console and go to the DB you are working with, *Authentication* section and then choose your sign in method.
 
 We will review the Google provider here.
@@ -349,6 +426,8 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 });
 ```
+
+### Accessing User DB Area
 
 
 
