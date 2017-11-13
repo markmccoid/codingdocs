@@ -11,5 +11,8 @@
   - [Local Storage](/Javascript/localStorage)
   - [lodash](/Javascript/lodash)
   - [ESLintSetup](/Javascript/ESLintSetup)
+  - [ES6 Cheat Sheet](/Javascript/ES6CheatSheet)
+  - [JS Array Functions](/Javascript/JSArrayFunctions)
+  - ​
 
 

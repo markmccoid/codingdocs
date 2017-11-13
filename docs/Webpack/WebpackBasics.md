@@ -286,6 +286,65 @@ When you push all these guys into a single CSS file, you will lose the ability t
 
 Please note that this is only one way to configure the Plugins and other stuff
 
+## Integrating jQuery
+
+Haven't tried this, but I believe you will first need to `yarn add jquery` and then in your app's main js file:
+
+```javascript
+window.jQuery = require('jquery');
+window.$ = require('jquery');
+//If you are using a 3rd party library that need jQuery
+require('materialize-css/dist/js/materialize.js');
+require('materialize-css/js/init.js');
+```
+
+ OR I saw another option that lets webpack deal with the requires:
+
+```
+window.jQuery = require('jquery');
+window.$ = require('jquery');
+
+```
+
+With:
+
+```
+ plugins: [
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery"
+        })
+    ]
+
+```
+
+## ProvidePlugin for Global requires
+
+[ProvidePlugin Docs](https://webpack.js.org/plugins/provide-plugin/#src/components/Sidebar/Sidebar.jsx)
+
+The `ProvidePlugin` can map modules to (free) variables. So you could define: "Every time I use the (free) variable `xyz` inside a module you (webpack) should set `xyz` to `require("abc")`."
+
+Example without `ProvidePlugin`:
+
+```
+// You need to require underscore before you can use it
+var _ = require("lodash");
+_.size(...);
+```
+
+Example with `ProvidePlugin`:
+
+```
+plugins: [
+  new webpack.ProvidePlugin({
+    "_": "lodash"
+  }) 
+]
+
+// If you use "_", underscore is automatically required
+_.size(...)
+```
+
 ##Webpack Dev Server
 
 The *webpack-dev-server* is a little Node.js [Express](http://expressjs.com/) server, which uses the *webpack-dev-middleware* to serve a *webpack bundle*. It also has a little runtime which is connected to the server via [Sock.js](http://sockjs.org/).
@@ -367,6 +426,24 @@ Our **.babelrc** file will now look like this:
     "transform-class-properties"
   ]
 }
+```
+
+## Babel Polyfill
+
+If you really want your app to work on older browsers (IE11, etc), you will need to include the babel polyfill.
+
+It is simple to use and set up.  First add it to your project:
+
+```javascript
+> yarn add babel-polyfill
+```
+
+Then in webpack you need to modify the entry point to an array as follows:
+
+```javascript
+...
+entry: ['babel-polyfill', './src/app.js']
+...
 ```
 
 
