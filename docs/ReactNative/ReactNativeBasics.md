@@ -1,4 +1,4 @@
-## App Creation
+# App Creation
 
 To create an app use the following:
 
@@ -140,14 +140,70 @@ For scenes to display, there are three required keys, they are:
 
 
 ## Common React Native Components
+
 - **View** - Anything shown on the screen must be wrapped in a view
 - **Text** - Text to display on the screen
 - **TouchableOpacity** - Wraps a Text component and allows it to be pressed.
 - **Modal**
 
 
+# Config / App Secrets File
+
+You should create a file outside of your components directory that will hold some basic configuration and items you want hidden from users.
+
+Configuration would include device screen dimensions, api URLs, api Keys.
+
+For Firebase, you could keep your firebase config and api information in a file like this.
+
+Below is an example that get device dimensions.
+
+```javascript
+'use strict'
+
+import Dimensions from 'Dimensions';
+
+const window = Dimensions.get('window');
+
+export default {
+  windowHeight: window.height,
+  windowWidth: window.width,
+
+  windowHeightHalf: window.height * 0.5,
+  windowHeightThird: window.height * 0.333,
+  windowHeightTwoThirds: window.height * 0.666,
+  windowHeightQuarter: window.height * 0.25,
+  windowHeightFifth: window.height * 0.20,
+  windowHeightThreeQuarters: window.height * 0.75,
+
+  windowWidthHalf: window.width * 0.5,
+  windowWidthThird: window.width * 0.333,
+  windowWidthTwoThirds: window.width * 0.666,
+  windowWidthQuarter: window.width * 0.25,
+  windowWidthFifth: window.width * 0.20,
+  windowWidthThreeQuarters: window.width * 0.75,
+  windowWidthNineTenths: window.width * 0.9,
+
+  apiUrl: 'https://newsapi.org/v1',
+  apiKey: 'YOUR_API_KEY', // add your API key here
+
+  /*
+   * Create your own API key by signing up for newsapi.org: https://newsapi.org/
+   * Plug it in here. We will explain how to use this in the next lesson
+   */
+}
+```
+
+
 
 # Third Party Components
 
-### react-native-communications
+## [react-native-communications](https://github.com/anarchicknight/react-native-communications)
+
 Open a web address, easily call, email, text, iMessage (iOS only) someone in React Native
+
+# React Native Playground
+
+[Snack.io](https://snack.expo.io/)
+
+This is a site that uses expo and allows you to test React Native code similar to codepen, jsbin, etc.
+
