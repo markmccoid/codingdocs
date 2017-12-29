@@ -1,6 +1,7 @@
 /node_modules
 myCodeDocs.zip
 *.bat
+.DS_Store
 
 # VSCode launch config
 /.vscode
