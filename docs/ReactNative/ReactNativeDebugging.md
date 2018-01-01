@@ -63,6 +63,10 @@ export default () => {
 
 Note, the global.reduxNativeDevTools lines.  These are the ones setting up what is need for using **React Native Debugger**
 
+Another option for setting up redux can be found in this udemy course section:
+
+[Redux Debugger Option 2](https://www.udemy.com/react-native-the-practical-guide/learn/v4/t/lecture/8567960?start=0)
+
 ### Using the Debugger
 
 Ok, so setting it up was pretty easy, but now using it is a bit tricky.  The below assumes you are using create-react-native-app and expo, which is why we need to start the debugger on a specific port.
