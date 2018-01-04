@@ -71,9 +71,16 @@ var x = 100;
 Tables are not in the standard, so all parsers may not work with them, but you need to separate all columns with pipes and then you MUST put a row with pipe colon hyphens to designate the header.
 
 | Dog Name | Dog Age | Color |
-|:---|:---|:----:|
-| Abby | 9 | black |
-| Peanut | 17 | tan|
-
+| :------- | :------ | :---: |
+| Abby     | 9       | black |
+| Peanut   | 17      |  tan  |
 
 Placement of the colon determines alignment.  To the left or right, then left or right aligned.  Colon on both left and right will center.
+
+## Create a Page Break
+
+Simply use the following:
+
+`<div style="page-break-after: always;"></div>`
+
+This will cause a page break when creating PDFs.
