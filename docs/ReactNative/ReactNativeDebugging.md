@@ -20,6 +20,46 @@ This will actually install an application in your applications folder on the mac
 
 ### Setup Redux
 
+I had trouble with the following, but it is now working.  The below is the proper way, but if it doesn't work, you can look at the other set up below this one.
+
+```javascript
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+// import { composeWithDevTools } from 'remote-redux-devtools';
+import thunk from 'redux-thunk';
+import { createLogger } from 'redux-logger';
+
+import carsReducer from '../reducers/cars';
+import servicesReducer from '../reducers/services';
+import filtersReducer from '../reducers/filters';
+import authReducer from '../reducers/auth';
+
+const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__ });
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+    // Prevents Redux DevTools from re-dispatching all previous actions.
+    shouldHotReload: false
+  }) || compose;
+
+const enhancer = composeEnhancers(applyMiddleware(thunk, loggerMiddleware));
+
+export default () => {
+  //store creation
+  const store = createStore(
+    combineReducers({
+      cars: carsReducer,
+      services: servicesReducer,
+      filters: filtersReducer,
+      auth: authReducer,
+    }),
+    enhancer
+  );
+  
+  return store;
+};
+```
+
+
+
 Here is a createStore function that injects what is needed for the remote debugger:
 
 ```Javascript
