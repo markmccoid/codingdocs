@@ -155,7 +155,7 @@ Configuration would include device screen dimensions, api URLs, api Keys.
 
 For Firebase, you could keep your firebase config and api information in a file like this.
 
-Below is an example that get device dimensions.
+Below is an example that gets device dimensions.
 
 ```javascript
 'use strict'
@@ -196,6 +196,56 @@ export default {
 
 
 # Third Party Components
+## [react-native-navigation](https://wix.github.io/react-native-navigation/#/)
+A native navigation solution from Wix.  Note that if you are using a create-react-native-app installation, you will need to eject before using Wix react native navigation.
+The intallation can be a bit tricky.  You have to get into the xcode project, but I found their instructions to be sufficient.
+
+## [react-native-vector-icons](https://github.com/oblador/react-native-vector-icons)
+Gives you access to icons to use within your application.  I have only used the Ionicons font.  You can view the available Ionicons at [Ionicons Available](https://ionicframework.com/docs/ionicons/).  Note that the name one the left is not the name to use, you must click on the icons to display the different names, usually prefixed with 'ios' or 'md'.
+
+You can access an icon via the Icon component as follows:
+
+```javascript
+import Icon from 'react-native-vector-icons/Ionicons'
+
+...
+//View other component properties on their gitHub page
+<Icon name='ios-arrow-forward' size={20} />
+```
+
+You can also use the Icon component to get a bitmapped image returned.  the getImageSource returns a promise.
+
+```javascript
+import { Navigation } from 'react-native-navigation';
+import Icon from 'react-native-vector-icons/Ionicons';
+
+const startTabs = () => {
+  Promise.all([
+    Icon.getImageSource('ios-albums', 30),
+    Icon.getImageSource('ios-car', 30)  
+  ]).then(sources => {
+    Navigation.startTabBasedApp({
+      tabs: [
+        {
+          screen: 'car-tracker.ServiceListScreen',
+          label: 'Service List',
+          icon: sources[0],
+          title: 'Service List'
+        },
+        {
+          screen: 'car-tracker.CarScreen',
+          label: 'Car Detail',
+          icon: sources[1],
+          title: 'Car List'
+        },
+      ]
+    });
+  });
+}
+
+export default startTabs;
+```
+
 
 ## [react-native-communications](https://github.com/anarchicknight/react-native-communications)
 
