@@ -1,3 +1,5 @@
+
+
 # The Movie DB API Reference
 
 ## Getting an API Key
@@ -31,7 +33,9 @@ https://image.tmdb.org/t/p/w500/8uO0gUM8aNqYLs1OsTBQiXu0fEv.jpg
 
 The configuration method also contains the list of change keys which can be useful if you are building an app that consumes data from the change feed.
 
-##  Search By Title (TV)
+## TV API Calls
+
+### Search By Title (TV)
 
 [TMDb Docs](https://developers.themoviedb.org/3/search/search-tv-shows)
 
@@ -43,7 +47,7 @@ https://api.themoviedb.org/3/search/tv?api_key=<API_Key>&page=1&include_adult=fa
 
 [Search By Name JSON Object](https://www.dropbox.com/s/q1jxqwd6m7734an/SearchByName_TV.json?dl=0)
 
-## Get Show Detail (TV)
+### Get Show Detail (TV)
 
 [TMDb Docs](https://developers.themoviedb.org/3/tv/get-tv-details)
 
@@ -55,7 +59,7 @@ https://api.themoviedb.org/3/tv/32815?api_key=<API_Key>
 
 [Get Show Detail JSON Object](https://www.dropbox.com/s/m0kmcsbvpaksgme/GetShowDetail_TV.json?dl=0)
 
-## Get Show Credits/Cast
+### Get Show Credits/Cast
 
 [TMDb Docs](https://developers.themoviedb.org/3/tv/get-tv-credits)
 
@@ -67,3 +71,119 @@ https://api.themoviedb.org/3/tv/32815/credits?api_key=<API_Key>
 
 [Get Show Credits JSON Object](https://www.dropbox.com/s/o9zhe9dk2qxk4gz/GetShowCredits_TV.json?dl=0)
 
+### Get Images for a TV Show
+
+[TMDb Docs](https://developers.themoviedb.org/3/tv/get-tv-images)
+
+API Example Call:
+
+```html
+https://api.themoviedb.org/3/tv/32815/images?api_key=<API_Key>
+```
+
+[Get Show Credits JSON Object](https://www.dropbox.com/s/h78io4k89i6y92s/GetImagesTV.json?dl=0)
+
+### Get TV Genre List
+
+[TMDb Docs](https://developers.themoviedb.org/3/genres/get-tv-list)
+
+API Example Call:
+
+```html
+https://api.themoviedb.org/3/genre/tv/list?api_key=<API_Key>
+```
+
+[Get Show Credits JSON Object](https://www.dropbox.com/s/zsxm6kqiiultayy/GetTVGenreList.json?dl=0)
+
+### Get TV Season and Episode Detail
+
+[TMDb Docs](https://developers.themoviedb.org/3/tv-episodes/get-tv-episode-details)
+
+/tv/{tv_id}/season/{season_number}/[episode/{episode_number}]
+
+There are a number of ways you can call this API to get information about a shows Seasons and Episodes.  All of the Get calls below require the TV Show ID.  This is obtained when you search for a TV Show by title.
+
+Get the **details of a season**, with 32815 being the tv show id:
+
+```html
+https://api.themoviedb.org/3/tv/32815?api_key=<API_Key>
+```
+
+[Get Show Credits JSON Object](https://www.dropbox.com/s/eoyadn2898mhj5b/GetTVSeasonDetail.json?dl=0)
+
+Get the **details of a ALL episodes in a season**, with 32815 being the tv show id:
+
+```html
+https://api.themoviedb.org/3/tv/32815/season/1?api_key=<API_Key>
+```
+
+[Get Show Credits JSON Object](https://www.dropbox.com/s/iqlbaxghznbd3dt/GetTVEpisodeDetail.json?dl=0)
+
+
+
+## Movie API Calls
+
+### Search for a Movie by Title
+
+[TMDB Docs](https://developers.themoviedb.org/3/search/search-movies)
+
+**Query Parameters**
+
+- page - returns the page specified.  If omitted only returns the first page.  In the return object you will also be handed a list of total pages.  You can use this information to help in navigating multiple pages.
+  If you query a page that doesn't exist, your "results" array will be empty.
+- query - contains the search text.
+- year - an optional parameter that will narrow your searches for movies release is passed year.
+
+API Example Call:
+
+```html
+https://api.themoviedb.org/3/search/movie?api_key=<API_Key>&page=1&include_adult=false&query=the house
+```
+
+[Search By Name Movie JSON Object](https://www.dropbox.com/s/if5amkjeoj6ub4n/SearchByName_Movie.json?dl=0)
+
+### Get Images for a Movie (Movie)
+
+[TMDB Docs](https://developers.themoviedb.org/3/movies/get-movie-images)
+
+**Query Parameters**
+
+- API Key
+
+API Example Call:
+
+The movie ID {345914} is returned in the movie objects when searching for a movie.
+
+```html
+https://api.themoviedb.org/3/movie/345914/images?api_key=<API_Key>
+```
+
+[Get Images for Movie JSON Object](https://www.dropbox.com/s/30spv0ejrk6z8du/GetImagesMovie.json?dl=0)
+
+### Get Movie Credits (Movie)
+
+[TMDB Docs](https://developers.themoviedb.org/3/movies/get-movie-credits)
+
+API Example Call:
+
+```html
+https://api.themoviedb.org/3/movie/345914/credits?api_key=<API_Key>
+```
+
+[Movie Credits JSON Object](https://www.dropbox.com/s/ywqj4xum687igkw/GetMovieCredits.json?dl=0)
+
+### Get (Find) Movies by Genre and More (Movie)
+
+[TDMB Docs](https://developers.themoviedb.org/3/discover/movie-discover)
+
+These API calls will allow you to search/discover movies by a number of different characteristics.  The docs will hold all of these details, but here are a few useful ones:
+
+- with_genres - return movies that match genre id(s).  You can get the Genre list for movies as follows:
+
+  ```html
+  https://api.themoviedb.org/3/discover/movie?api_key=<API_Key>&sort_by=popularity.desc&include_adult=false&with_genres=16,28&page=1
+  ```
+
+- with_cast
+
+[Get Find Movies JSON Object](https://www.dropbox.com/s/heefzsu7xg0yu4y/GetFindMoviesBy.json?dl=0)
