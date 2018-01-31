@@ -39,7 +39,7 @@ If you want to get the actual boolean returned, then you can use the logical not
 !!('cat' && 'dog')
 //returns true
 ```
-## Destructuring 
+## Destructuring
 
 Allows you to pull variables out of object easily:
 
@@ -62,4 +62,16 @@ let { name, age = 18 } = person;
 //If you want to rename and set a default value
 let { name, age: drinkingAge = 18 } = person;
 ```
+
+## Get a Random Number between 0 and n
+
+```javascript
+// 5 is the max number you want returned
+// This will give you a random number between 1 and 5
+Math.floor(Math.random() * 5 + 1)
+```
+
+
+
+
 
