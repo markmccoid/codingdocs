@@ -83,6 +83,32 @@ https://api.themoviedb.org/3/tv/32815/images?api_key=<API_Key>
 
 [Get Images JSON Object](https://www.dropbox.com/s/h78io4k89i6y92s/GetImagesTV.json?dl=0)
 
+Quick and dirty of what you get back from this call is:
+
+```json
+{
+  "backdrops": [],
+  "posters": [],
+  "id": 12345
+}
+```
+
+The **backdrops** and **posters** contain an array that looks like this:
+
+```json
+{
+  "aspect_ratio": 0.6666666666666666,
+  "file_path": "/x4bn54rjIFAxKLi6JLUgGwBy3W2.jpg",
+  "height": 1500,
+  "iso_639_1": "en",
+  "vote_average": 5.312,
+  "vote_count": 1,
+  "width": 1000
+}
+```
+
+However, I have found that you simply create a URL as detailed below using the *file_path* attribute.
+
 All image attributes just contain the image files name `/zpefjkadfasdf.jpg`, to access the image, you must use information obtained from the configuration object to build the image URL.  You could simply hard code this information in, however, if the base URL ever changed, your app would break.  Probably a good idea to pull this information from the config object when loading the app.
 
 To build an image URL, you will need 3 pieces of data. The `base_url`, `size` and `file_path`. Simply combine them all and you will have a fully qualified URL. Here’s an example URL:
