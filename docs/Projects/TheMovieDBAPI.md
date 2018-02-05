@@ -81,7 +81,41 @@ API Example Call:
 https://api.themoviedb.org/3/tv/32815/images?api_key=<API_Key>
 ```
 
-[Get Show Credits JSON Object](https://www.dropbox.com/s/h78io4k89i6y92s/GetImagesTV.json?dl=0)
+[Get Images JSON Object](https://www.dropbox.com/s/h78io4k89i6y92s/GetImagesTV.json?dl=0)
+
+All image attributes just contain the image files name `/zpefjkadfasdf.jpg`, to access the image, you must use information obtained from the configuration object to build the image URL.  You could simply hard code this information in, however, if the base URL ever changed, your app would break.  Probably a good idea to pull this information from the config object when loading the app.
+
+To build an image URL, you will need 3 pieces of data. The `base_url`, `size` and `file_path`. Simply combine them all and you will have a fully qualified URL. Here’s an example URL:
+
+```
+https://image.tmdb.org/t/p/w500/8uO0gUM8aNqYLs1OsTBQiXu0fEv.jpg
+
+```
+
+To get this information from the config object, you will need to pull the following items:
+
+```json
+{
+  "images": {
+    "base_url": "http://image.tmdb.org/t/p/",
+    "secure_base_url": "https://image.tmdb.org/t/p/",
+    "backdrop_size": [
+      "w300".
+      ...
+    ],
+    "logo_sizes": [],
+    "poster_sizes": [
+      "w92",
+      ...
+      "original"
+    ]
+  }
+}
+```
+
+There are other attributes, however, the above should be enough to generate an image URL.
+
+Not sure of the best way to get at the sizes, will most likely pick the size needed for the image and hardcode.
 
 ### Get TV Genre List
 
