@@ -179,6 +179,16 @@ https://api.themoviedb.org/3/tv/32815/season/1?api_key=<API_Key>
 
 [Get Show Credits JSON Object](https://www.dropbox.com/s/iqlbaxghznbd3dt/GetTVEpisodeDetail.json?dl=0)
 
+### Get External ID (IMDB)
+
+ /tv/{tv_id}/external_ids
+
+```html
+https://api.themoviedb.org/3/tv/32815/external_ids?api_key=<API_Key>
+```
+
+[Get External IDs](https://www.dropbox.com/s/624oo9m79rgx8dd/GetExternalIds_TV.json?dl=0)
+
 
 
 ## Movie API Calls
