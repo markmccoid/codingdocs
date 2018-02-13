@@ -257,3 +257,11 @@ These API calls will allow you to search/discover movies by a number of differen
 - with_cast
 
 [Get Find Movies JSON Object](https://www.dropbox.com/s/heefzsu7xg0yu4y/GetFindMoviesBy.json?dl=0)
+
+
+
+# TV Tracker Plus Data Guide
+
+Data will reside in a *redux* store in the application and initially in a *Firebase* database for permanent (backend) storage.  
+
+I want to be able to switch out the back end database (Firebase) easily.  So, the thought is we will have the following mappings:
