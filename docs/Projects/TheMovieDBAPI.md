@@ -169,7 +169,7 @@ Get the **details of a season**, with 32815 being the tv show id:
 https://api.themoviedb.org/3/tv/32815?api_key=<API_Key>
 ```
 
-[Get Show Credits JSON Object](https://www.dropbox.com/s/eoyadn2898mhj5b/GetTVSeasonDetail.json?dl=0)
+[Get Show Season JSON Object](https://www.dropbox.com/s/eoyadn2898mhj5b/GetTVSeasonDetail.json?dl=0)
 
 Get the **details of a ALL episodes in a season**, with 32815 being the tv show id:
 
@@ -177,7 +177,7 @@ Get the **details of a ALL episodes in a season**, with 32815 being the tv show 
 https://api.themoviedb.org/3/tv/32815/season/1?api_key=<API_Key>
 ```
 
-[Get Show Credits JSON Object](https://www.dropbox.com/s/iqlbaxghznbd3dt/GetTVEpisodeDetail.json?dl=0)
+[Get Show Episode Detail JSON Object](https://www.dropbox.com/s/iqlbaxghznbd3dt/GetTVEpisodeDetail.json?dl=0)
 
 ### Get External ID (IMDB)
 
