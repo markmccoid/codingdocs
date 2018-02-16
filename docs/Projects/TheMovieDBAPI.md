@@ -187,9 +187,13 @@ https://api.themoviedb.org/3/tv/32815/season/1?api_key=<API_Key>
 https://api.themoviedb.org/3/tv/32815/external_ids?api_key=<API_Key>
 ```
 
-[Get External IDs](https://www.dropbox.com/s/624oo9m79rgx8dd/GetExternalIds_TV.json?dl=0)
+[Get External IDs JSON](https://www.dropbox.com/s/624oo9m79rgx8dd/GetExternalIds_TV.json?dl=0)
 
+### Using IMDB External ID to get to Episode
 
+Url - http://www.imdb.com/title/{imdb_id}/?ref_=ttep_ep1
+
+Example: [http://www.imdb.com/title/tt1668798/?ref_=ttep_ep1](http://www.imdb.com/title/tt1668798/?ref_=ttep_ep1)
 
 ## Movie API Calls
 
