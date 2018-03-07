@@ -28,3 +28,33 @@ The CSS below is a more thorough list of the CSS properties that can deal with t
   hyphens: auto;
 }
 ```
+
+## [Whitespace](https://developer.mozilla.org/en-US/docs/Web/CSS/white-space)
+
+You can preserve whitespace in your text by using the *white-space* css attribute.
+
+- **normal** - will collapse all whitespace to a single character.  This is the default before.  If you have ever been flabbergasted as to why you can't put two spaces in your HTML and have it show up, it is because of this.
+  This setting, however, will wrap the text within whatever container's borders it is in.
+- **nowrap** - your text will be one big long line.
+- **pre** - Sequences of whitespace are preserved. Lines are only broken at newline characters in the source and at *br* elements.
+- **pre-wrap** - same as pre, except it will create new lines as needed to stay within container.
+- **pre-line** - Sequences of whitespace are collapsed. Lines are broken at newline characters, at *br*, and as necessary to fill line boxes.
+
+
+
+## Custom Fonts [@font-face](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face)
+
+Multiple ways to do this, but if you have fonts on your web server, you can use the way described here to pull in those fonts and use them.
+
+```css
+@font-face {
+  font-family: "MyCustomFont";
+  src: url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2"),
+       url("/fonts/OpenSans-Regular-webfont.woff") format("woff");
+}
+
+p {
+    font-family: MyCustomFont;
+}
+```
+
