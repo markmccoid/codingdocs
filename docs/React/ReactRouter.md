@@ -20,6 +20,53 @@ We will review the main components, which are:
 - Link
 - Redirect
 
+## Important Props - match and location
+
+You will get passed some props from react-router and they are what make it so powerful. 
+
+Probably the most used will be *this.props.match*
+
+### match
+
+First, some terminology 
+
+- **pathname** is what you see in your browsers URL bar.
+- **path** is what you see in the Route components *path* prop and is returned in match.path.  These may have params listed in the format of **:myParam**
+- **url** is what you see in your browsers URL bar
+- **isExact** will be true if `pathname===path` so: 
+  - `/mypath/:id === /mypath/12` BUT
+  - `/mypath/:id !== /mypath/12/other`
+
+
+
+```javascript
+match: {
+	isExact: true, 
+    params: {
+        param1: '',
+        param2: ''
+    },
+	path: "/myPath/:myId"
+	url: "/myPath/12"
+}
+```
+
+### location
+
+this.props.location is where you will go for the Query string. `/mypath?userId=5`
+
+```javascript
+location: {
+	pathname: "",
+    search: "?userId=x",
+    state:
+}
+```
+
+You can use the npm package *query-string* to parse the search property of the location object.
+
+
+
 ### BrowserRouter
 This is the top level component that you will wrap all of your other components in.   In **Electron** I found using MemoryRouter worked better and if you need to have access to your own history component, use just the **Router** component.
 
