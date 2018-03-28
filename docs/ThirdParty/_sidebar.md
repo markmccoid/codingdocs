@@ -4,4 +4,6 @@
     - [ant Table](/ThirdParty/AntTable)
   - [Semantic UI](/ThirdParty/SemanticUI)
   - [Formik & Yup](/ThirdParty/Formik)
+  - [Alerts](/ThirdParty/Alerts)
+
 
