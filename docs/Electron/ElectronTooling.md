@@ -1,4 +1,5 @@
 ## Set process.env.NODE_ENV in Windows
+
 We often use the NODE_ENV variable to toggle things on in Dev and off in Production.  You can set an command window instance of this variable like this:
 ```
 C:> set NODE_ENV=devlopment 
@@ -32,3 +33,30 @@ In your _app.on('ready',())_ callback, you need to run this BrowserWindow functi
 	}
 ```
 Note that there is a version folder.  Make sure to check your extension directory to see if there are multiple versions.
+
+## Native Builds
+
+Since we are creating application for Windows/Mac/Unix, there can be npm components that are specific to each platform and as such need to be installed(built) differently.
+
+Haven't dealt with much, but check out the Master Electron course on Udemy, section 6 & 7.
+
+## Devtron
+
+[Devtron Website](https://electronjs.org/devtron)
+
+First npm install:
+
+```
+$ npm install devtron --save-dev
+```
+
+So you don't muddy your application code, you can run devtron in the chrome developer tools.
+
+First open the chrome developer tools when your application is running and go to the console tab.
+
+Then run this command:
+
+`require('devtron').install()`
+
+This will add a new tab to the developer tools called Devtron.
+

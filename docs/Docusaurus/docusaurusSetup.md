@@ -27,7 +27,7 @@ The header of the markdown docs in the /docs/ directory is YAML front matter.  S
 
 ```yaml
 ---
-id: filenameworks
+id: filename-works
 title: Title to See
 sidebar_label: Link in Sidebar
 ---
@@ -42,6 +42,8 @@ You need to know where the files are that create all the different pages.  This 
 The markdown files that represent your documentation are located in the **docs** directory, which is at the same level as the **website** directory.
 
 You can also create an **assets** or other named directory to place images an other information your markdown documents may need.  However, you cannot try to organize your markdown documents using directories.  Looks like docusaurus doesn't want the markdown files in directories.
+
+It is a good idea to come up with a standard for naming your docs also.  I like hyphens between words.
 
 ### siteConfig.js
 
@@ -115,3 +117,38 @@ Next, how do you access these docs from places other than the sidebar? You will 
 
 ```
 
+### Main Page - Index.js
+
+So where do you set up the main page of the site?
+
+This is in the **index.js** file located in */webiste/pages/en*.
+
+This is a react file with a lot of defaults.  If you scroll to the end of the file, you will see the exported component:
+
+```javascript
+class Index extends React.Component {
+  render() {
+    let language = this.props.language || '';
+
+    return (
+      <div>
+        <HomeSplash language={language} />
+        <div className="mainContainer">
+        {/*
+            <Features />
+            <FeatureCallout />
+          <LearnHow />
+          <TryOut />
+          <Description />*/
+          }
+          <Resources />
+        </div>
+      </div>
+    );
+  }
+}
+```
+
+This "Index" component uses a number of other components built within the **index.js** page.
+
+The **HomeSplash** component can be customized to show your basic links.
