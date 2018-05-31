@@ -384,6 +384,8 @@ To associate an action with a menu and it's accelerator, you simply add a *click
 
 Easy as creating a new window instance with a *new BrowserWindow({})* call.
 
+[BrowserWindow Properties](https://electronjs.org/docs/api/browser-window#class-browserwindow)
+
 Example function:
 
 ```javascript
@@ -437,6 +439,46 @@ We must set up the ***helpWindow*** variable outside the function so that is can
 Since we don't want multiple instances of the User Guide window to be opened, we can check to see if the ***helpWindow*** variable has been initialized and if so, just give it focus.  If not, then create the window.
 
 We will need to set the variable ***helpWindow*** to null on the 'closed' event.
+
+### Frameless Windows
+
+[Frameless Windows Docs](https://electronjs.org/docs/api/frameless-window)
+
+Key take away from these docs is the fact that we can use some webkit CSS rules to keep users from being able to select things like the H1 tags, etc.. Also we can make a region draggable.
+
+#### Draggable Regions
+
+By default, the frameless window is non-draggable. Apps need to specify   `-webkit-app-region: drag` in CSS to tell Electron which regions are draggable   (like the OS's standard title bar), and apps can also use   `-webkit-app-region: no-drag` to exclude the non-draggable area from the   draggable region. Note that only rectangular shapes are currently supported.
+
+Note: `-webkit-app-region: drag` is known to have problems while the developer tools are open. See this [GitHub issue](https://github.com/electron/electron/issues/3647) for more information including a workaround.
+
+To make the whole window draggable, you can add `-webkit-app-region: drag` as   `body`'s style:
+
+```html
+<body style="-webkit-app-region: drag">
+  </body>
+```
+
+And note that if you have made the whole window draggable, you must also mark   buttons as non-draggable, otherwise it would be impossible for users to click on   hem:
+
+```css
+button {
+    -webkit-app-region: no-drag;
+  }
+```
+
+If you're setting just a custom title bar as draggable, you also need to make all buttons in title bar non-draggable. 
+
+#### Text Selection
+
+In a frameless window the dragging behaviour may conflict with selecting text.   For example, when you drag the titlebar you may accidentally select the text on   the titlebar. To prevent this, you need to disable text selection within a   draggable area like this:
+
+```css
+.titlebar {
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+  }
+```
 
 -----
 
@@ -549,7 +591,48 @@ ipcMain.on('todo:add', (event, todo) => {
 });
 ```
 
+## Useful NPM Modules
+
+### Electron-Window-State
+
+Stores and restores window sizes and positions in your Electron App.
+
+```
+$ npm install --save electron-window-state
+```
+
+```javascript
+const windowStateKeeper = require('electron-window-state');
+let win;
+ 
+app.on('ready', function () {
+  // Load the previous state with fallback to defaults
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 1000,
+    defaultHeight: 800
+  });
+ 
+  // Create the window using the state information
+  win = new BrowserWindow({
+    'x': mainWindowState.x,
+    'y': mainWindowState.y,
+    'width': mainWindowState.width,
+    'height': mainWindowState.height
+  });
+ 
+  // Let us register listeners on the window, so we can update the state
+  // automatically (the listeners will be removed when the window is closed)
+  // and restore the maximized or full screen state
+  mainWindowState.manage(win);
+});
+```
+
+
+
+
+
 ## Cheatsheet
+
 **mac vs windows**
 Check the _process.platform_ variable
 - 'win32'

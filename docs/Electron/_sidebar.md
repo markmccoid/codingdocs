@@ -1,5 +1,6 @@
 - [Home](/)
 - Electron
-	- [Basics](/Electron/ElectronBasics)
-	- [Tooling](/Electron/ElectronTooling.md)
-	- [Packaging](/Electron/ElectronPackaging.md)
+  - [Basics](/Electron/ElectronBasics)
+  - [Tooling](/Electron/ElectronTooling.md)
+  - [Packaging](/Electron/ElectronPackaging.md)
+  - [Electron React](/Electron/ElectronReact)
