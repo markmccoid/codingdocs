@@ -1,4 +1,4 @@
-[Electron React Boilerplate](https://github.com/chentsulin/electron-react-boilerplate)
+[Electron React Boilerplate](https://github.com/chentsulin/electron-react-boilerplate) - Not sure if I like this one, uses two package.json files.  Prefer to follow the details in the article below.
 
 [Article link](https://medium.com/@kitze/%EF%B8%8F-from-react-to-an-electron-app-ready-for-production-a0468ecb1da3)
 
