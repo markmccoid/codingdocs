@@ -5,6 +5,7 @@
 - [Functional and Class Components](#functional-and-class-components)
 - [State](#state)
 - [input basics](#input-basics)
+- [env file](#env-file)
 
 ---
 
@@ -71,3 +72,43 @@ This allows us to store a reference to that form element on the class.
 />
 <a onClick={() => console.log(this.userNameInput.value)} > Get Username</a>
 ```
+## Env File
+
+When using Firebase or other API that needs a API Key or other information that you do not want to put up to github, you can store this information in a *.env* file.
+
+When using create-react-app, you can only access env variables using the format of **REACT_APP_...**
+
+For Firebase, create a **.env** file in the root of your project with the following:
+
+```
+REACT_APP_FB_APIKEY=keydetails.......
+REACT_APP_FB_AUTHDOMAIN=cartracker-.....firebaseapp.com
+REACT_APP_FB_DATABASEURL=https://cartracker-871cc.firebaseio.com
+REACT_APP_FB_PROJECTID=cartracker-871cc
+REACT_APP_FB_STORAGEBUCKET=cartracker-871cc.appspot.com
+REACT_APP_FB_MESSAGINGSENDERID=136622808562
+```
+
+Notice, no quotes!!
+
+Next, in your Firebase.js file, insert this:
+
+```javascript
+const FB_API_KEY = process.env.REACT_APP_FB_APIKEY;
+const FB_AUTHDOMAIN = process.env.REACT_APP_FB_AUTHDOMAIN;
+const FB_DATABASEURL = process.env.REACT_APP_FB_DATABASEURL;
+const FB_PROJECTID = process.env.REACT_APP_FB_PROJECTID;
+const FB_STORAGEBUCKET = process.env.REACT_APP_FB_STORAGEBUCKET;
+const FB_MESSAGINGSENDERID = process.env.REACT_APP_FB_MESSAGINGSENDERID;
+
+const config = {
+  apiKey: FB_API_KEY,
+  authDomain: FB_AUTHDOMAIN,
+  databaseURL: FB_DATABASEURL,
+  projectId: FB_PROJECTID,
+  storageBucket: FB_STORAGEBUCKET,
+  messagingSenderId: FB_MESSAGINGSENDERID
+};
+```
+
+DON'T FORGET to put your .env file in your .gitignore file!
