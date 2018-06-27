@@ -22,7 +22,7 @@ Here is my build section.  I don't know what the appId is for or what it does.  
 		},
 		"extraFiles": "./data/*",
 		"win": {
-		  "icon", "assets/icon.ico"
+		  "icon": "assets/icon.ico"
 		}
 	},
 ```

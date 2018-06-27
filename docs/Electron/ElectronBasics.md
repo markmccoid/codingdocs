@@ -440,6 +440,39 @@ Since we don't want multiple instances of the User Guide window to be opened, we
 
 We will need to set the variable ***helpWindow*** to null on the 'closed' event.
 
+### Setting the Window Title and Icon
+
+There are two ways to set the the title of a window.
+
+1. Pass the title property when instantiating via the `new BrowserWindow({ title: '' })` call.
+2. Set the `<title>my Title </title>` property in the html file used for the window.
+
+**NOTE:** the `<title>` will take precedence if you set both.  
+
+My rule is to only use it via the BrowserWindow() call.  This will allow you to control via code.
+
+The **icon** for the window is set by passing the `icon: ''` property to the `BrowserWindow()` call.
+
+**NOTE:** when setting the icon for the application, make sure to add it to the `package.json` file in the *build* section.
+
+```json
+  "build": {
+    "appId": "com.mccoid.car-service-tracker",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "./assets"
+    },
+    "win": {
+		  "icon": "assets/cartracker.ico"
+		}
+  },
+```
+
+As a rule, I believe the ico file needs to be 256x256.
+
 ### Frameless Windows
 
 [Frameless Windows Docs](https://electronjs.org/docs/api/frameless-window)
@@ -699,3 +732,4 @@ Pass the backgrounThrottling web preference to the BrowserWindow constructor to 
       webPreferences: { backgroundThrottling: false}
     });
 ```
+
