@@ -150,6 +150,8 @@ export default App;
 
 You can load MemoryRouter with initial routes using the "initialEntries" array.  Think this is only useful to force you to your main path as all routes do not need to be in this initial array.
 
+Note that all components rendered via the Route component will get a bunch of route props.  One of particular use is the **history** prop.  It has functions like **push**, **goBack**, **replace**, etc.
+
 Next create a **MyPages.js** file to hold our example route destinations.
 
 ```jsx
