@@ -3,6 +3,7 @@
   - [Javascript Libraries](/JSLibraries/)  
   - [Node](/Node/)
   - [Electron](/Electron/)
+  - [Docusaurus/](/Docusaurus/)
   - [Markdown](/Markdown/)
   - [React](/React/)
   - [Redux](/Redux/)
