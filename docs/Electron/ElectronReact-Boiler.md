@@ -202,14 +202,14 @@ However, I want my main react components in a component directory.  I will refac
 
 ![](https://dl.dropbox.com/s/kiiqotgtypqmjm3/electron-refactor-structure.png?dl=0)
 
-## Emotion JS Setup
+## Emotion JS Setup and Decorator Support
 
 To get some of the advanced features and syntactic sugar from emotion, you need a babel plugin.  Unfortunately, create-react-app doesn't let you add this plugin. To get it to work in CRA without ejecting you need to do the following.
 
 First you need to install some dependencies (included here are emotion and react-emotion)
 
 ```
-$ yarn add babel-loader babel-preset-env babel-plugin-emotion emotion react-app-rewired
+$ yarn add babel-loader babel-preset-env babel-plugin-emotion emotion react-app-rewired babel-plugin-transform-decorators-legacy
 ```
 
 The **react-app-rewired** is the module that makes this possible.  But you are not done yet.
@@ -237,10 +237,12 @@ You need to add a **.babelrc** file in the root.
 {
   "env": {
     "production": {
-      "plugins": [["emotion", { "hoist": true }]]
+      "plugins": [["emotion", { "hoist": true }],
+                 "transform-decorators-legacy"]
     },
     "development": {
-      "plugins": [["emotion", { "sourceMap": true, "autoLabel": true }]]
+      "plugins": [["emotion", { "sourceMap": true, "autoLabel": true }],
+      "transform-decorators-legacy"]
     }
   }
 }

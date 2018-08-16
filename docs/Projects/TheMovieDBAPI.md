@@ -262,10 +262,72 @@ These API calls will allow you to search/discover movies by a number of differen
 
 [Get Find Movies JSON Object](https://www.dropbox.com/s/heefzsu7xg0yu4y/GetFindMoviesBy.json?dl=0)
 
+# The OMDb API
+
+This API is an unofficial pull of IMDB's database.  Currently thinking of using it to get the imdb links for the episodes.
+
+Right now the API key I have is limited to 1000/day.
+
+[Upgrade to more API Requests](https://www.patreon.com/bePatron?u=5038490)
+
+Here is my **API Key**: c0247b61
+
+Haven't found any documentation on the API, maybe once you become a patron.  Anyway, I'm looking to just get the IMDB ids for the episodes.  Here is the way to do that.
+
+```html
+http://www.omdbapi.com/?i=tt0944947&Season=1&apikey=c0247b61
+```
+
 
 
 # TV Tracker Plus Data Guide
 
 Data will reside in a *redux* store in the application and initially in a *Firebase* database for permanent (backend) storage.  
 
-I want to be able to switch out the back end database (Firebase) easily.  So, the thought is we will have the following mappings:
+There are three places where data is stored, 
+
+- **firebase** - the main storage area for the data.  Code to Access in **firebase** folder.
+- **redux** - the application state.
+- **TMDb API** - the source for our TV and movie data. Code to access in **api** folder.
+
+To facilitate communication between these different stores, we have the **dataModel** folder.  It houses the code that access the **TMDb API** and the **firebase** code.
+
+For example, when I add a new TV Show, the *dmAddTVShowData* function will access the **TMDb API** code to get the source data, then format it to first send to **firebase** and call the appropriate firebase function and then return properly formatted data for the redux store.
+
+The data structure itself needs some work, but currently it is the following:
+
+```javascript
+data = {
+    TV: {
+        showData: {},
+        seasonData: {}, //episode data in this structure
+        extraData: {}, //links, etc - probably should be in showData or userData or combo 
+        userData: {} //User specific, shows watched, downloaded, custom poster image etc        
+    },
+    auth: {
+        uid: '', //firebase uid
+        status: '', //SUCCESS, WORKING, ERROR
+        message: {
+            code:
+            message:
+        },
+    search: {
+        searchTerm: '',
+        status: '' //undefined, loading, success, error
+	  }
+    }
+}
+
+```
+
+
+
+# Routes
+
+- **/login** -> Login.js main login screen.  Starting point.
+- **/** -> Main.js. Main screen with Header and Links to TV, API, Movie
+- **/tv** -> TV starting point
+- **/tv/add** - TV Add show endpoint.
+- **/tv/detail/:id** - When a TV Show is chosen. The id will be passed to this route for display.
+- **/api** -> API Starting point
+
